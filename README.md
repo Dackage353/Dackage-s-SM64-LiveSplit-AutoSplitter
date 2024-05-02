@@ -101,12 +101,12 @@ ASL File Customization
 Code Reference
 --------------
 
-Animation ID's
-4864 aka 0x1300: warp hole
-
-4866 aka 0x1302: land star/key dance, exit
-4867 aka 0x1303: water star dance
-4871 aka 0x1307: land star/key dance, no exit
-
-6404 aka 0x1904: falling after star grab
-6409 aka 0x1909: Grand Star grab
+Animation ID's<br />
+4864 aka 0x1300: warp hole<br />
+<br />
+4866 aka 0x1302: land star/key dance, exit<br />
+4867 aka 0x1303: water star dance<br />
+4871 aka 0x1307: land star/key dance, no exit<br />
+<br />
+6404 aka 0x1904: falling after star grab<br />
+6409 aka 0x1909: Grand Star grab<br />
