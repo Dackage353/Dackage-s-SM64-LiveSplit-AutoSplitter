@@ -9,12 +9,16 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 This was built off the aglab2 LiveSplit.SuperMario64.asl autosplitter
 	https://github.com/aglab2/LiveSplitAutoSplitters
 
+Notes
+- This is only made for binary ROM hacks of the US version of SM64. (Which is most hacks)
+- Only full game speedruns were in mind in making this. Stage RTA may not work well
+
 Changes
 - the code for the split handling was restructured, allowing for multiple split conditions. Also
 	conditions can be anywhere in the split instead of only the end
 - there's now support for course labels (e.g. [C1] or [B2]). Numbers still work if desired
 - for the last split, can now split on a warp (for use with star road 0/80 star)
-- small fixes, like key splits not working on a water star, autosplitting after skipping a split after conditions met
+- small fixes, like key splits not working on a water star, or autosplitting sometimes after skipping a split
 
 - split on music change was removed for now
 
@@ -28,8 +32,7 @@ Unchanged
 Conditions
 ----------
 
-All conditions must be separate from other words/terms in the split names. Also,
-	none of them are case sensitive.
+Conditions are not case sensitive
 
 - for a reset split, add "R" or "reset"
 - for a key split, add "key"
@@ -42,6 +45,14 @@ All conditions must be separate from other words/terms in the split names. Also,
 	actionable after the save prompt of a "no-exit" star/key.
 - To specify which split option you want, you can add -x or -xcam for xcam, -i or -instant for instant, -c
 	or -classic for classic
+- If the star collection warps you back to the same level, the level id check isn't going to work. If you want it to split
+	on fadeout in this case, you can use the classic option (-c or -classic)
+	
+All conditions must be separate from other words/terms in the split names (meaning separated by a space or other whitespace)
+	For Example:
+- in "key 1 fight" a key keyword would be recognized, but not in "key1 fight"
+- in "enter [OW2]" a level label would be recognized, but not in "enter [OW2]!"
+- in "side star (35) + R" a reset keyword and a star count would be recognized, but not in "side star(35) +R"
 
 ----------------------
 ASL File Customization
@@ -51,17 +62,17 @@ ASL File Customization
 - note that .asl uses C# code (.NET Framework 4.6.1)
 
 - the default key and star count split option can be changed. can use -l or -level for level change if
-	you change this. look for:
-	vars.SplitOption_Default = "level";
+	you change this. look for:<br />
+	vars.SplitOption_Default = "level";<br />
 	
-- you can add or remove specific key or reset keywords. look for:
-	vars.ResetKeywords = new string[] { "R", "reset" };
-	vars.KeyKeywords = new string[] { "key" };
+- you can add or remove specific key or reset keywords. look for:<br />
+	vars.ResetKeywords = new string[] { "R", "reset" };<br />
+	vars.KeyKeywords = new string[] { "key" };<br />
 	
 - Below are the course labels included by default for every level id in the game. You can add or remove
 	labels as desired. Note that different areas within a level share the same level id. They are not case 
-	sensitive. Look for:
-	#region Add course labels
+	sensitive. Look for:<br />
+	#region Add course labels<br />
 
 - try using this helper to find level id's https://github.com/aglab2/LiveSplitAutoSplitters/releases/tag/helper
 	or potentially use quad https://github.com/DavidSM64/Quad64/releases
