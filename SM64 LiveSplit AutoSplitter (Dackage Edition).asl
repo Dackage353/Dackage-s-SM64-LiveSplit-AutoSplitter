@@ -134,8 +134,6 @@ startup
 	vars.AddCourseLabels(31, new string[] { "Secret Level 3", "Secret 3", "SL3", "S3" }); // Wing Mario over the Rainbow
 	vars.AddCourseLabels(25, new string[] { "Secret Level 4", "Secret 4", "SL4", "S4", "Cake", "End" }); // End Cake Picture
 	#endregion
-	
-	vars.initialKeyFlags = new bool[2];
 }
 
 init
@@ -315,8 +313,8 @@ update
 			vars.splitLevelID = -1;
 			vars.splitOption = string.Empty;
 			
-			vars.initialKeyFlags[0] = key1Flag;
-			vars.initialKeyFlags[1] = key2Flag;
+			vars.initialKeyFlag1 = key1Flag;
+			vars.initialKeyFlag2 = key2Flag;
 			
 			string[] splitNameTerms = current.splitName.Split(null);
 			splitNameTerms = splitNameTerms.Select(term => term.Trim()).ToArray();
@@ -373,7 +371,7 @@ update
 		#endregion
 		
 		#region Test split info against current values
-		bool passedKeyTest = !vars.splitContainsKey || (vars.initialKeyFlags[0] != key1Flag || vars.initialKeyFlags[1] != key2Flag);
+		bool passedKeyTest = !vars.splitContainsKey || (vars.initialKeyFlag1 != key1Flag || vars.initialKeyFlag2 != key2Flag);
 		bool passedStarCountTest = vars.splitStarCount == -1 || current.starCount == vars.splitStarCount;
 		bool passedLevelIDTest = vars.splitLevelID == -1 || current.levelID == vars.splitLevelID;
 		current.passedAllTests = passedKeyTest && passedStarCountTest && passedLevelIDTest;
