@@ -1,4 +1,4 @@
-# SM64-LiveSplit-AutoSplitter-Dackage-Edition
+# Dackage's SM64 LiveSplit AutoSplitter
 
 -------------
 General Notes

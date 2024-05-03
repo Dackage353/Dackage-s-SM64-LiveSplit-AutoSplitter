@@ -417,7 +417,6 @@ onStart
 	vars.resetIGTFixup = 0;
 	
 	current.splitName = null;
-	
 	current.passedAllTests = false;
 }
 
