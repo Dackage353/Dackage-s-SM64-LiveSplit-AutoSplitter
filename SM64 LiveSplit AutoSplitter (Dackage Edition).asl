@@ -96,15 +96,6 @@ startup
 	{
 		return array.Any(element => string.Equals(text, element, StringComparison.OrdinalIgnoreCase));
 	});
-	
-	vars.InitializeSplitVariables = (Action) (() =>
-	{
-		vars.splitContainsReset = false;
-		vars.splitContainsKey = false;
-		vars.splitStarCount = -1;
-		vars.splitLevelID = -1;
-		vars.splitOption = string.Empty;
-	});
 	#endregion
 	
 	#region Add course labels
@@ -143,6 +134,8 @@ startup
 	vars.AddCourseLabels(31, new string[] { "Secret Level 3", "Secret 3", "SL3", "S3" }); // Wing Mario over the Rainbow
 	vars.AddCourseLabels(25, new string[] { "Secret Level 4", "Secret 4", "SL4", "S4", "Cake", "End" }); // End Cake Picture
 	#endregion
+	
+	vars.initialKeyFlags = new bool[2];
 }
 
 init
@@ -309,14 +302,19 @@ update
 		#region Initialize split handling
 		current.splitName = vars.GetSplitName();
 		
-		bool key1Flag = (current.keyFlagsByte & 16 != 0) || (current.keyFlagsByte & 64 != 0);
-		bool key2Flag = (current.keyFlagsByte & 32 != 0) || (current.keyFlagsByte & 128 != 0);
+		bool key1Flag = (current.keyFlagsByte & (1 << 4)) != 0 || (current.keyFlagsByte & (1 << 6)) != 0;
+		bool key2Flag = (current.keyFlagsByte & (1 << 5)) != 0 || (current.keyFlagsByte & (1 << 7)) != 0;
 		#endregion
 		
 		#region Process split name on new split
 		if (current.splitName != old.splitName)
 		{
-			vars.InitializeSplitVariables();
+			vars.splitContainsReset = false;
+			vars.splitContainsKey = false;
+			vars.splitStarCount = -1;
+			vars.splitLevelID = -1;
+			vars.splitOption = string.Empty;
+			
 			vars.initialKeyFlags[0] = key1Flag;
 			vars.initialKeyFlags[1] = key2Flag;
 			
@@ -421,8 +419,6 @@ onStart
 	vars.resetIGTFixup = 0;
 	
 	current.splitName = null;
-	vars.InitializeSplitVariables();
-	vars.initialKeyFlags = new bool[2];
 	
 	current.passedAllTests = false;
 }
