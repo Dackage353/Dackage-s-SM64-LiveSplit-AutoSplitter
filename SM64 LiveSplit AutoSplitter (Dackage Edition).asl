@@ -46,6 +46,7 @@ startup
 	settings.Add("DeleteFileA", false, "Delete \"File A\" when a new run starts");
 	settings.Add("SplitOnLastSplitStar", true, "Split on final split when Grand Star or regular star was grabbed");
 	settings.Add("SplitOnLastSplitWarp", false, "Split on final split when warped (like in Star Road 0/80 Star)");
+	settings.Add("LastImpactStartReset", false, "Enable Last Impact start/reset mode");
 	#endregion
 	
 	#region Create methods
@@ -146,7 +147,6 @@ startup
 
 init
 {
-	#region Initialize variables
 	current.starCount = (byte) 0;
 	current.levelID = (byte) 0;
 	current.animationID = 0;
@@ -164,7 +164,6 @@ init
 	{
 		vars.retroarch = true;
 	}
-	#endregion
 }
 
 update
@@ -388,11 +387,21 @@ update
 
 start
 {
+	if (settings["LastImpactStartReset"])
+	{
+		return old.levelID == 35 && current.levelID == 16 && current.starCount == 0;
+	}
+	
 	return current.time < old.time;
 }
 
 reset
 {
+	if (settings["LastImpactStartReset"])
+	{
+		return old.levelID == 35 && current.levelID == 16 && current.starCount == 0;
+	}
+	
 	if (current.time < old.time)
 	{
 		if (vars.splitContainsReset)

@@ -14,14 +14,15 @@ Changes
 	conditions can be anywhere in the split instead of only the end
 - there's now support for course labels (e.g. [C1] or [B2]). Numbers still work if desired
 - for the last split, can now split on a warp (for use with star road 0/80 star)
+- small fixes, like key splits not working on a water star, autosplitting after skipping a split after conditions met
 
 - split on music change was removed for now
-- removed Last Impact mode (Yeah)
 
 Unchanged
 - ability to split on final star, reset, key, star count, or level id
 - should still work with a variety of emulators including PJ64, parallel launcher, and retroarch
 - can still delete file A on reset
+- Last Impact mode
 
 ----------
 Conditions
