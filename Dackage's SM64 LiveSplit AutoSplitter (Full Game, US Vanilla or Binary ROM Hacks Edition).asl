@@ -40,6 +40,9 @@ startup
 	vars.SectionNameCloseSymbol = (char) 125; // Close brace
 	
 	vars.EmptyFile = ((IEnumerable<byte>) Enumerable.Repeat((byte) 0, vars.FileALength)).ToArray();
+	
+	vars.AddressSearchInterval = 1000;
+	vars.DeleteFileADuration = 4 * 60;
 	#endregion
 	
 	#region Initialize settings
@@ -146,15 +149,10 @@ init
 	
 	vars.baseRAMAddressFound = false;
 	vars.stopwatch = new Stopwatch();
-	vars.ADDRESS_SEARCH_INTERVAL = 1000;
 	vars.baseRAMAddress = IntPtr.Zero;
 	vars.verifyRetriesLeft = 0;
 	
-	vars.retroarch = false;
-	if (game.ProcessName.Contains("retroarch"))
-	{
-		vars.retroarch = true;
-	}
+	vars.retroarch = game.ProcessName.Contains("retroarch");
 }
 
 update
@@ -162,7 +160,7 @@ update
 	#region Handle baseRAMAddress
 	if (!vars.baseRAMAddressFound)
 	{
-		if (!vars.stopwatch.IsRunning || vars.stopwatch.ElapsedMilliseconds > vars.ADDRESS_SEARCH_INTERVAL)
+		if (!vars.stopwatch.IsRunning || vars.stopwatch.ElapsedMilliseconds > vars.AddressSearchInterval)
 		{
 			vars.stopwatch.Start();
 			vars.baseRAMAddress = IntPtr.Zero;
@@ -282,13 +280,10 @@ update
 		#region Handle vars.deleteFileA
 		if (vars.deleteFileA)
 		{
-			if (current.time < 4 * 60)
+			if (current.time < vars.DeleteFileADuration)
 			{
 				IntPtr ptr = vars.baseRAMAddress + vars.FileAAddress;
-				if (!game.WriteBytes(ptr, (byte[]) vars.EmptyFile))
-				{
-					print("Error. Failed to delete file a");
-				}
+				game.WriteBytes(ptr, (byte[]) vars.EmptyFile);
 			}
 			else
 			{
