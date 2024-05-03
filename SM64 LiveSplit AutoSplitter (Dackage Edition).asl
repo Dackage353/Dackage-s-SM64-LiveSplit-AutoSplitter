@@ -309,16 +309,16 @@ update
 		#region Initialize split handling
 		current.splitName = vars.GetSplitName();
 		
-		var bitArray = new System.Collections.BitArray(new byte[] { current.keyFlagsByte });
-		bool key1Flag = bitArray.Get(4) || bitArray.Get(6);
-		bool key2Flag = bitArray.Get(5) || bitArray.Get(7);
+		bool key1Flag = (current.keyFlagsByte & 16 != 0) || (current.keyFlagsByte & 64 != 0);
+		bool key2Flag = (current.keyFlagsByte & 32 != 0) || (current.keyFlagsByte & 128 != 0);
 		#endregion
 		
 		#region Process split name on new split
 		if (current.splitName != old.splitName)
 		{
 			vars.InitializeSplitVariables();
-			vars.initialKeyFlags = new bool[] { key1Flag, key2Flag };
+			vars.initialKeyFlags[0] = key1Flag;
+			vars.initialKeyFlags[1] = key2Flag;
 			
 			string[] splitNameTerms = current.splitName.Split(null);
 			splitNameTerms = splitNameTerms.Select(term => term.Trim()).ToArray();
