@@ -35,10 +35,6 @@ startup
 	#endregion
 	
 	#region Non-editable constants
-	// The livesplit parser can't handle braces in quotes
-	vars.SectionNameOpenSymbol = (char) 123; // Open brace
-	vars.SectionNameCloseSymbol = (char) 125; // Close brace
-	
 	vars.EmptyFile = ((IEnumerable<byte>) Enumerable.Repeat((byte) 0, vars.FileALength)).ToArray();
 	
 	vars.AddressSearchInterval = 1000;
@@ -69,7 +65,8 @@ startup
 		
 		if (containsSubsplits && splitName.Length > 0)
 		{
-			if (splitName[0] == vars.SectionNameOpenSymbol && splitName.Contains(vars.SectionNameCloseSymbol.ToString()))
+			// The livesplit parser can't handle braces in quotes. 123 is open brace, 125 is close brace
+			if (splitName[0] == (char) 123 && splitName.Contains((char) 125))
 			{
 				return splitName.Substring(splitName.IndexOf(vars.SectionNameCloseSymbol) + 1);
 			}
@@ -104,7 +101,7 @@ startup
 	#region Add course labels
 	vars.levelLabelsAndIDs = new Dictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
 	
-	// Not case sensitive
+	// Labels are not case sensitive
 	vars.AddCourseLabels(9, new string[] { "Course 1", "C1", "C01" }); // Bob-omb Battlefield
 	vars.AddCourseLabels(24, new string[] { "Course 2", "C2", "C02" }); // Whomp's Fortress
 	vars.AddCourseLabels(12, new string[] { "Course 3", "C3", "C03" }); // Jolly Roger Bay
@@ -306,10 +303,10 @@ update
 			vars.splitContainsKey = false;
 			vars.splitStarCount = -1;
 			vars.splitLevelID = -1;
-			vars.splitOption = string.Empty;
+			vars.splitOption = null;
 			
-			vars.initialKeyFlag1 = key1Flag;
-			vars.initialKeyFlag2 = key2Flag;
+			vars.initialKey1Flag = key1Flag;
+			vars.initialKey2Flag = key2Flag;
 			
 			string[] splitNameTerms = current.splitName.Split(null);
 			splitNameTerms = splitNameTerms.Select(term => term.Trim()).ToArray();
@@ -348,7 +345,7 @@ update
 							vars.splitLevelID = vars.levelLabelsAndIDs[inside];
 						}
 					}
-					else if (term.First() == '-')
+					else if (term.First() == vars.ArgumentSymbol)
 					{
 						string argument = term.Substring(1);
 						
@@ -366,7 +363,7 @@ update
 		#endregion
 		
 		#region Test split info against current values
-		bool passedKeyTest = !vars.splitContainsKey || (vars.initialKeyFlag1 != key1Flag || vars.initialKeyFlag2 != key2Flag);
+		bool passedKeyTest = !vars.splitContainsKey || (vars.initialKey1Flag != key1Flag || vars.initialKey2Flag != key2Flag);
 		bool passedStarCountTest = vars.splitStarCount == -1 || current.starCount == vars.splitStarCount;
 		bool passedLevelIDTest = vars.splitLevelID == -1 || current.levelID == vars.splitLevelID;
 		current.passedAllTests = passedKeyTest && passedStarCountTest && passedLevelIDTest;
@@ -449,7 +446,7 @@ split
 		bool levelChanged = current.levelID != old.levelID;
 		if (vars.splitContainsKey || vars.splitStarCount != -1)
 		{
-			if (vars.splitOption == string.Empty)
+			if (vars.splitOption == null)
 			{
 				vars.splitOption = vars.SplitOption_Default;
 			}
