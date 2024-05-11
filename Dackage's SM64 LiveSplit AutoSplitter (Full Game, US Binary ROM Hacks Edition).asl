@@ -37,6 +37,10 @@ startup
 	#region Non-editable constants
 	vars.EmptyFile = ((IEnumerable<byte>) Enumerable.Repeat((byte) 0, vars.FileALength)).ToArray();
 	
+	// The livesplit parser can't handle braces in quotes. 123 is open brace, 125 is close brace
+	vars.SubsplitSectionNameOpenSymbol = (char) 123;
+	vars.SubsplitSectionNameCloseSymbol = (char) 125;
+	
 	vars.AddressSearchInterval = 1000;
 	vars.DeleteFileADuration = 4 * 60;
 	#endregion
@@ -65,10 +69,9 @@ startup
 		
 		if (containsSubsplits && splitName.Length > 0)
 		{
-			// The livesplit parser can't handle braces in quotes. 123 is open brace, 125 is close brace
-			if (splitName[0] == (char) 123 && splitName.Contains((char) 125))
+			if (splitName[0] == vars.SubsplitSectionNameOpenSymbol && splitName.Contains(vars.SubsplitSectionNameCloseSymbol.ToString()))
 			{
-				return splitName.Substring(splitName.IndexOf(vars.SectionNameCloseSymbol) + 1);
+				return splitName.Substring(splitName.IndexOf(vars.SubsplitSectionNameCloseSymbol) + 1);
 			}
 			else if (splitName[0] == '-')
 			{
