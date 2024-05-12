@@ -97,10 +97,11 @@ Course Labels
 ASL File Customization
 ----------------------
 
-- there are additional settings you can customize, though for now it must be done in the .asl file
+There are additional settings you can customize, though for now it must be done in the .asl file
 - any basic text editor will do, but I've been using Notepad++. If you do, change the language to C#
 - .asl uses C# code (.NET Framework 4.6.1)
 
+The settings were made to be easy to change
 - the default key and star count split option can be changed. Can use -l or -level for level change if
 	you change this. Look for:<br />
 	vars.SplitOption_Default = "level";<br />
