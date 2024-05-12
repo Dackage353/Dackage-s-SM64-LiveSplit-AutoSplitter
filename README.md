@@ -9,23 +9,20 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 	https://github.com/aglab2/LiveSplitAutoSplitters
 
 Notes
-- This is only made for binary ROM hacks of the US version of SM64. (Which is most hacks)
-- Only full game speedruns were in mind in making this. Stage RTA may not work well
+- this is only made for binary ROM hacks of the US version of SM64. (Which is most hacks)
+- only full game speedruns were in mind in making this. Stage RTA may not work well
 
 Changes
 - can use course labels instead of level id's e.g. [C1], [B1], or [WC]. Can still use level id's if desired.
 	See the bottom of the readme for a complete list
-- can use multiple split conditions e.g. "get toad (20) and enter [C8]".
-- split conditions can be anywhere in the split name. Previously had to be at the end
-- added option to split on grand stars that are a warp. Useful for categories like Star Road 0/80 Star or Jammin' Journey 60 Star
+- can now use multiple split conditions e.g. "get toad (20) and enter [C8]".
+- split conditions can now be anywhere in the split name. Previously had to be at the end
+- added the option to split on grand stars that are a warp. Useful for categories like Star Road 0/80 Star or Jammin' Journey 60 Star
 
 Small fixes
 - key splits no longer require a star count condition
-- skipping the split after collecting a star won't autosplit on level change
+- skipping a split after collecting a star won't autosplit on level change
 - fix for autosplitting not always working after water star/key animations
-
-
-- split on music change was removed for now
 
 Retained features
 - ability to split on final star, reset, key, star count, or level id
@@ -65,7 +62,7 @@ All conditions must be separate from other words/terms in the split names (meani
 Course Labels
 -------------
 
-- below are the course labels included by default.
+- below are the course labels included by default. They are not case sensitive
 - try using this helper to find level id's https://github.com/aglab2/LiveSplitAutoSplitters/releases/tag/helper
 	or potentially use quad https://github.com/DavidSM64/Quad64/releases
 
@@ -107,18 +104,18 @@ ASL File Customization
 
 - there are additional settings you can customize, though for now it must be done in the .asl file
 - any basic text editor will do, but I've been using Notepad++. If you do, change the language to C#
-- note that .asl uses C# code (.NET Framework 4.6.1)
+- .asl uses C# code (.NET Framework 4.6.1)
 
-- the default key and star count split option can be changed. can use -l or -level for level change if
-	you change this. look for:<br />
+- the default key and star count split option can be changed. Can use -l or -level for level change if
+	you change this. Look for:<br />
 	vars.SplitOption_Default = "level";<br />
 	
-- you can add or remove specific key or reset keywords. look for:<br />
+- you can add or remove specific key or reset keywords. Look for:<br />
 	vars.ResetKeywords = new string[] { "R", "reset" };<br />
 	vars.KeyKeywords = new string[] { "key" };<br />
 	
 - you can add or remove course labels as desired. Note that different areas within a level share the
-	same level id. They are not case sensitive. Look for:<br />
+	same level id. Look for:<br />
 	#region Add course labels<br />
 
 --------------
