@@ -8,8 +8,8 @@ Notes
 - this is only made for binary ROM hacks of the US version of SM64. (Which is most hacks)
 - only full game speedruns were in mind in making this. Stage RTA may not work well
 
-Changes
-- can use course labels instead of level id's e.g. [C1], [B1], or [WC]. Can still use level id's if desired.
+New features and changes
+- can use course labels instead of level id's e.g. [C1], [B1], or [WC]. You're still able to use level id's if desired.
 	See the bottom of the readme for a complete list
 - can now use multiple split conditions e.g. "get toad (20) and enter [C8]".
 - split conditions can now be anywhere in the split name. Previously had to be at the end
@@ -40,9 +40,8 @@ Conditions are not case sensitive
 - to add a star count condition, add it with parentheses e.g. (10) or (128)
 - to add a level id/label condition, add it with square brackets e.g. [9] or [C1]
 
-- for key and star count splits, there are 4 options for split timing. Level change is the default for golds accuracy but
-	there's also xcam, grab, and classic.
--
+For key and star count splits, there are 4 options for split timing. Level change is the default for golds accuracy but
+	there's also xcam, grab, and classic
 - classic is the aglab autosplitter behavior. It will split after fadeout or after Mario is actionable after the save
 	prompt for a nonstop star/key. This is most useful for stars that warp you back to the same level.
 - to specify which split option you want, you can add -x or -xcam for xcam, -g or -grab for grab, -c
