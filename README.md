@@ -4,9 +4,8 @@
 General Notes
 -------------
 
-Wanting to add the ability to use course labels, I looked into making my autosplitter version.
-
-This was built off the aglab2 LiveSplit.SuperMario64.asl autosplitter
+Wanting to add the ability to use course labels, I looked into making my autosplitter version. This is
+	functionally very similiar to aglab2's LiveSplit.SuperMario64.asl autosplitter and is what I built off of
 	https://github.com/aglab2/LiveSplitAutoSplitters
 
 Notes
@@ -14,19 +13,28 @@ Notes
 - Only full game speedruns were in mind in making this. Stage RTA may not work well
 
 Changes
-- the code for the split handling was restructured, allowing for multiple split conditions. Also
-	conditions can be anywhere in the split instead of only the end
-- there's now support for course labels (e.g. [C1] or [B2]). Numbers still work if desired
-- for the last split, can now split on a warp (for use with star road 0/80 star)
-- small fixes, like key splits not working on a water star, or autosplitting sometimes after skipping a split
+- can use course labels instead of level id's e.g. [C1], [B1], or [WC]. Can still use level id's if desired.
+	See the bottom of the readme for a complete list
+- can use multiple split conditions e.g. "get toad (20) and enter [C8]".
+- split conditions can be anywhere in the split name. Previously had to be at the end
+- added option to split on grand stars that are a warp. Useful for categories like Star Road 0/80 Star or Jammin' Journey 60 Star
+
+Small fixes
+- key splits no longer require a star count condition
+- skipping the split after collecting a star won't autosplit on level change
+- fix for autosplitting not always working after water star/key animations
+
 
 - split on music change was removed for now
 
-Unchanged
+Retained features
 - ability to split on final star, reset, key, star count, or level id
-- should still work with a variety of emulators including PJ64, parallel launcher, and retroarch
-- can still delete file A on reset
+- compatibility with a variety of emulators including the many Project64's and parallel launcher
+- delete file A on reset
 - Last Impact mode
+
+Removed features
+- split on music change is removed for now, but I've never seen anyone use this
 
 ----------
 Conditions
@@ -39,44 +47,28 @@ Conditions are not case sensitive
 - to add a star count condition, add it with parentheses e.g. (10) or (128)
 - to add a level id/label condition, add it with square brackets e.g. [9] or [C1]
 
-- For key and star count splits, there are 4 options for split timing. The default is level change.
-	There's also xcam, instant, and classic.
-- Classic is the aglab autosplitter behavior.  It will split on a level change or after Mario is
-	actionable after the save prompt of a "no-exit" star/key.
-- To specify which split option you want, you can add -x or -xcam for xcam, -i or -instant for instant, -c
+- for key and star count splits, there are 4 options for split timing. The default is level change.
+	There's also xcam, grab, and classic.
+- classic is the aglab autosplitter behavior. It will split on a level change or after Mario is
+	actionable after the save prompt of a "no-exit" star/key. It's also useful for stars that warp you
+	back to the same level.
+- to specify which split option you want, you can add -x or -xcam for xcam, -g or -grab for grab, -c
 	or -classic for classic
-- If the star collection warps you back to the same level, the level id check isn't going to work. If you want it to split
-	on fadeout in this case, you can use the classic option (-c or -classic)
-	
+
 All conditions must be separate from other words/terms in the split names (meaning separated by a space or other whitespace)
 	For Example:
 - in "key 1 fight" a key keyword would be recognized, but not in "key1 fight"
 - in "enter [OW2]" a level label would be recognized, but not in "enter [OW2]!"
 - in "side star (35) + R" a reset keyword and a star count would be recognized, but not in "side star(35) +R"
 
-----------------------
-ASL File Customization
-----------------------
+-------------
+Course Labels
+-------------
 
-- there are additional settings you can customize, though for now it must be done in the .asl file
-- note that .asl uses C# code (.NET Framework 4.6.1)
-
-- the default key and star count split option can be changed. can use -l or -level for level change if
-	you change this. look for:<br />
-	vars.SplitOption_Default = "level";<br />
-	
-- you can add or remove specific key or reset keywords. look for:<br />
-	vars.ResetKeywords = new string[] { "R", "reset" };<br />
-	vars.KeyKeywords = new string[] { "key" };<br />
-	
-- Below are the course labels included by default for every level id in the game. You can add or remove
-	labels as desired. Note that different areas within a level share the same level id. They are not case 
-	sensitive. Look for:<br />
-	#region Add course labels<br />
-
+- below are the course labels included by default.
 - try using this helper to find level id's https://github.com/aglab2/LiveSplitAutoSplitters/releases/tag/helper
 	or potentially use quad https://github.com/DavidSM64/Quad64/releases
-	
+
 9  aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
 24 aka 0x18: "Course 2", "C2", "C02" // Whomp's Fortress<br />
 12 aka 0x0C: "Course 3", "C3", "C03" // Jolly Roger Bay<br />
@@ -108,6 +100,26 @@ ASL File Customization
 20 aka 0x14: "Secret Level 2", "Secret 2", "SL2", "S2" // Secret Aquarium<br />
 31 aka 0x1F: "Secret Level 3", "Secret 3", "SL3", "S3" // Wing Mario over the Rainbow<br />
 25 aka 0x19: "Secret Level 4", "Secret 4", "SL4", "S4", "Cake", "End" // End Cake Picture<br />
+
+----------------------
+ASL File Customization
+----------------------
+
+- there are additional settings you can customize, though for now it must be done in the .asl file
+- any basic text editor will do, but I've been using Notepad++. If you do, change the language to C#
+- note that .asl uses C# code (.NET Framework 4.6.1)
+
+- the default key and star count split option can be changed. can use -l or -level for level change if
+	you change this. look for:<br />
+	vars.SplitOption_Default = "level";<br />
+	
+- you can add or remove specific key or reset keywords. look for:<br />
+	vars.ResetKeywords = new string[] { "R", "reset" };<br />
+	vars.KeyKeywords = new string[] { "key" };<br />
+	
+- you can add or remove course labels as desired. Note that different areas within a level share the
+	same level id. They are not case sensitive. Look for:<br />
+	#region Add course labels<br />
 
 --------------
 Code Reference

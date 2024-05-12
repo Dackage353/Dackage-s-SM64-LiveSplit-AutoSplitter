@@ -10,7 +10,7 @@ startup
 	vars.SplitOption_ClassicKeywords = new string[] { "c", "classic" };
 	vars.SplitOption_LevelKeywords = new string[] { "l", "level" };
 	vars.SplitOption_XCamKeywords = new string[] { "x", "xcam" };
-	vars.SplitOption_InstantKeywords = new string[] { "i", "instant" };
+	vars.SplitOption_GrabKeywords = new string[] { "g", "grab" };
 	vars.SplitOption_Default = "level"; // Must match a keyword from above
 	
 	// Not case sensitive
@@ -355,7 +355,7 @@ update
 						if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_ClassicKeywords, argument) ||
 							vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, argument) ||
 							vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, argument) ||
-							vars.StringArrayContains_IgnoreCase(vars.SplitOption_InstantKeywords, argument))
+							vars.StringArrayContains_IgnoreCase(vars.SplitOption_GrabKeywords, argument))
 						{
 							vars.splitOption = argument;
 						}
@@ -467,7 +467,7 @@ split
 			{
 				return current.animationID == 4866 || current.animationID == 4867 || current.animationID == 4871;
 			}
-			else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_InstantKeywords, vars.splitOption))
+			else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_GrabKeywords, vars.splitOption))
 			{
 				return true;
 			}
