@@ -40,11 +40,11 @@ Conditions are not case sensitive
 - to add a star count condition, add it with parentheses e.g. (10) or (128)
 - to add a level id/label condition, add it with square brackets e.g. [9] or [C1]
 
-- for key and star count splits, there are 4 options for split timing. The default is level change.
-	There's also xcam, grab, and classic.
-- classic is the aglab autosplitter behavior. It will split on a level change or after Mario is
-	actionable after the save prompt of a "no-exit" star/key. It's also useful for stars that warp you
-	back to the same level.
+- for key and star count splits, there are 4 options for split timing. Level change is the default for golds accuracy but
+	there's also xcam, grab, and classic.
+-
+- classic is the aglab autosplitter behavior. It will split after fadeout or after Mario is actionable after the save
+	prompt for a nonstop star/key. This is most useful for stars that warp you back to the same level.
 - to specify which split option you want, you can add -x or -xcam for xcam, -g or -grab for grab, -c
 	or -classic for classic
 
