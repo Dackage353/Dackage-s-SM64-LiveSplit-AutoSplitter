@@ -1,3 +1,10 @@
+/*
+Dackage's SM64 LiveSplit AutoSplitter v1.0 (Full Game, US Binary ROM Hacks Edition)
+
+Github repository:
+https://github.com/Dackage353/Dackage-s-SM64-LiveSplit-AutoSplitter
+*/
+
 state("project64") { }
 state("retroarch") { }
 

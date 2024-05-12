@@ -127,3 +127,10 @@ Animation ID's<br />
 <br />
 6404 aka 0x1904: falling after star grab<br />
 6409 aka 0x1909: Grand Star grab<br />
+
+--------------
+Special Thanks
+--------------
+
+- DJ_Tala for help with testing
+- aglab2 for the creation of the original and some help
