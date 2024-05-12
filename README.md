@@ -25,6 +25,7 @@ Retained features
 - compatibility with a variety of emulators including the many Project64's and parallel launcher
 - delete file A on reset
 - Last Impact mode
+- igt
 
 Removed features
 - split on music change is removed for now, but I've never seen anyone use this

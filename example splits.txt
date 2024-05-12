@@ -1,0 +1,49 @@
+
+Star Road 20 Star Basic
+PPP (5)
+BOI (9)
+GG (13)
+SLR (16)
+CH (20)
+key
+
+Star Road 20 Star Extended
+enter [C3]
+tower high (1)
+tower low (2)
+c^ (3)
+flooded cave (4)
+climb the ruins (5)
+toad (6) + enter [C1]
+side of mountain (7)
+bomb clip (8)
+secrets (9)
+enter [C5]
+big boo (10)
+risky walkway (11)
+secret tunnel (12)
+lone tree (13)
+enter [C2]
+purple switch (14)
+windmill (15)
+water clip (16)
+enter [C4]
+other entrance (17)
+pole (18)
+box clip (19)
+building (20)
+enter [B1]
+enter [F1]
+key fight
+
+Made up splits
+enter [C1]
+star 1 (1)
+star 2 (2)
+toad (3) -x
+mips (4) -x
+enter [B1]
+reds (5) + enter [F1]
+key + reset
+enter [B3]
+final fight
