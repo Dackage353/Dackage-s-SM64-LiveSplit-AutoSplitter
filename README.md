@@ -12,13 +12,13 @@ New features and changes
 - can use course labels instead of level id's e.g. [C1], [B1], or [WC]. You're still able to use level id's if desired.
 	See the bottom of the readme for a complete list
 - can now use multiple split conditions e.g. "get toad (20) and enter [C8]".
-- split conditions can now be anywhere in the split name. Previously had to be at the end
+- split conditions can now be anywhere in the split name. (Previously they had to be at the end)
 - added the option to split on grand stars that are a warp. Useful for categories like Star Road 0/80 Star or Jammin' Journey 60 Star
 
 Small fixes
 - key splits no longer require a star count condition
 - skipping a split after collecting a star won't autosplit on level change
-- fix for autosplitting not always working after water star/key animations
+- fix for the autosplitting not always working after water star/key animations
 
 Retained features
 - ability to split on final star, reset, key, star count, or level id
@@ -42,7 +42,7 @@ Conditions are not case sensitive
 
 For key and star count splits, there are 4 options for split timing. Level change is the default for golds accuracy but
 	there's also xcam, grab, and classic
-- classic is the aglab autosplitter behavior. It will split after fadeout or after Mario is actionable after the save
+- classic is the aglab autosplitter behavior. It will split after a fadeout or after Mario is actionable after the save
 	prompt for a nonstop star/key. This is most useful for stars that warp you back to the same level.
 - to specify which split option you want, you can add -x or -xcam for xcam, -g or -grab for grab, -c
 	or -classic for classic
@@ -57,7 +57,7 @@ All conditions must be separate from other words/terms in the split names (meani
 Course Labels
 -------------
 
-- below are the course labels included by default. They are not case sensitive
+Below are the course labels included by default. They are not case sensitive
 - try using this helper to find level id's https://github.com/aglab2/LiveSplitAutoSplitters/releases/tag/helper
 	or potentially use quad https://github.com/DavidSM64/Quad64/releases
 
