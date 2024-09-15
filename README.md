@@ -59,7 +59,7 @@ Course Labels
 -------------
 
 Below are the course labels included by default. They are not case sensitive
-- try using this helper to find level id's https://github.com/aglab2/LiveSplitAutoSplitters/releases/tag/helper
+- try using this helper to find level id's (PJ64v1.6 only?) https://github.com/aglab2/LiveSplitAutoSplitters/releases/tag/helper
 	or potentially use quad https://github.com/DavidSM64/Quad64/releases
 
 9  aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
