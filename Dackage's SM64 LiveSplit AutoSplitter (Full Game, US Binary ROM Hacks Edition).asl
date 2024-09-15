@@ -1,10 +1,3 @@
-/*
-Dackage's SM64 LiveSplit AutoSplitter v1.0 (Full Game, US Binary ROM Hacks Edition)
-
-Github repository:
-https://github.com/Dackage353/Dackage-s-SM64-LiveSplit-AutoSplitter
-*/
-
 state("project64") { }
 state("retroarch") { }
 
@@ -148,7 +141,7 @@ startup
 
 init
 {
-	current.starCount = (byte) 0;
+	current.starCount = (short) 0;
 	current.levelID = (byte) 0;
 	current.animationID = 0;
 	current.time = 0;
@@ -275,7 +268,7 @@ update
 	#endregion
 	
 	#region Read memory addresses
-	current.starCount = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.StarCountAddress));
+	current.starCount = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.StarCountAddress));
 	current.levelID = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
 	current.animationID = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
 	current.time = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.TimeAddress));
