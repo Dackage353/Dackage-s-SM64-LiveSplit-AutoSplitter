@@ -387,10 +387,10 @@ gameTime
 {
 	if (current.numVBlanks < old.numVBlanks)
 	{
-		vars.igtOffset += old.numVBlanks;
+		vars.numVBlanksResetOffset += old.numVBlanks;
 	}
 	
-	return TimeSpan.FromSeconds((double)(vars.igtOffset + current.numVBlanks) / 60.0416);
+	return TimeSpan.FromSeconds((double)(vars.numVBlanksResetOffset + current.numVBlanks) / 60.0416);
 }
 
 reset
@@ -493,7 +493,7 @@ start
 onStart
 {
 	vars.deleteFileA = settings["DeleteFileA"];
-	vars.igtOffset = 0;
+	vars.numVBlanksResetOffset = 0;
 	
 	current.splitName = null;
 	current.splitIndex = 0;
