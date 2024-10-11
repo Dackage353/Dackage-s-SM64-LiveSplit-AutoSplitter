@@ -28,7 +28,7 @@ startup
 	vars.StarCountAddress = 0x33B218;
 	vars.LevelIDAddress = 0x32DDFA;
 	vars.AnimationIDAddress = 0x33B17C;
-	vars.TimeAddress = 0x32D580;
+	vars.NumVBlanksAddress = 0x32D580;
 	vars.FileAAddress = 0x207708;
 	vars.FileALength = 0x70;
 	vars.KeyByteOffset = 0x0;
@@ -144,7 +144,7 @@ init
 	current.starCount = (short) 0;
 	current.levelID = (byte) 0;
 	current.animationID = 0;
-	current.time = 0;
+	current.numVBlanks = 0;
 	current.keyFlagsByte = (byte) 0;
 	
 	vars.baseRAMAddressFound = false;
@@ -271,7 +271,7 @@ update
 	current.starCount = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.StarCountAddress));
 	current.levelID = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
 	current.animationID = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
-	current.time = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.TimeAddress));
+	current.numVBlanks = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
 	current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyByteOffset));
 	#endregion
 	
@@ -280,7 +280,7 @@ update
 		#region Handle vars.deleteFileA
 		if (vars.deleteFileA)
 		{
-			if (current.time < vars.DeleteFileADuration)
+			if (current.numVBlanks < vars.DeleteFileADuration)
 			{
 				IntPtr ptr = vars.baseRAMAddress + vars.FileAAddress;
 				game.WriteBytes(ptr, (byte[]) vars.EmptyFile);
@@ -294,13 +294,14 @@ update
 		
 		#region Initialize split handling
 		current.splitName = vars.GetSplitName();
+		current.splitIndex = timer.CurrentSplitIndex;
 		
 		bool key1Flag = (current.keyFlagsByte & (1 << 4)) != 0 || (current.keyFlagsByte & (1 << 6)) != 0;
 		bool key2Flag = (current.keyFlagsByte & (1 << 5)) != 0 || (current.keyFlagsByte & (1 << 7)) != 0;
 		#endregion
 		
 		#region Process split name on new split
-		if (current.splitName != old.splitName)
+		if (current.splitName != old.splitName || current.splitIndex != old.splitIndex)
 		{
 			vars.splitContainsReset = false;
 			vars.splitContainsKey = false;
@@ -376,14 +377,20 @@ update
 	return true;
 }
 
-start
+// Without this, livesplit will increment the igt when the ROM is not running
+isLoading
 {
-	if (settings["LastImpactStartReset"])
+	return true;
+}
+
+gameTime
+{
+	if (current.numVBlanks < old.numVBlanks)
 	{
-		return old.levelID == 35 && current.levelID == 16 && current.starCount == 0;
+		vars.igtOffset += old.numVBlanks;
 	}
 	
-	return current.time < old.time;
+	return TimeSpan.FromSeconds((double)(vars.igtOffset + current.numVBlanks) / 60.0416);
 }
 
 reset
@@ -393,7 +400,7 @@ reset
 		return old.levelID == 35 && current.levelID == 16 && current.starCount == 0;
 	}
 	
-	if (current.time < old.time)
+	if (current.numVBlanks < old.numVBlanks)
 	{
 		if (vars.splitContainsReset)
 		{
@@ -406,21 +413,12 @@ reset
 	return false;
 }
 
-onStart
-{
-	vars.deleteFileA = settings["DeleteFileA"];
-	vars.resetIGTFixup = 0;
-	
-	current.splitName = null;
-	current.passedAllTests = false;
-}
-
 split
 {
 	#region Handle reset splits
 	if (old.passedAllTests && vars.splitContainsReset)
 	{
-		return current.time < old.time;
+		return current.numVBlanks < old.numVBlanks;
 	}
 	#endregion
 	
@@ -482,18 +480,22 @@ split
 	return false;
 }
 
-// Without this, livesplit will increment the igt when the ROM is not running
-isLoading
+start
 {
-	return true;
-}
-
-gameTime
-{
-	if (current.time < old.time)
+	if (settings["LastImpactStartReset"])
 	{
-		vars.resetIGTFixup += old.time;
+		return old.levelID == 35 && current.levelID == 16 && current.starCount == 0;
 	}
 	
-	return TimeSpan.FromSeconds((double)(vars.resetIGTFixup + current.time) / 60.0416);
+	return current.numVBlanks < old.numVBlanks;
+}
+
+onStart
+{
+	vars.deleteFileA = settings["DeleteFileA"];
+	vars.igtOffset = 0;
+	
+	current.splitName = null;
+	current.splitIndex = 0;
+	current.passedAllTests = false;
 }
