@@ -13,7 +13,8 @@ New features and changes
 	See the bottom of the readme for a complete list
 - can now use multiple split conditions e.g. "get toad (20) and enter [C8]".
 - split conditions can now be anywhere in the split name. (Previously they had to be at the end)
-- added the option to split on grand stars that are a warp. Useful for categories like Star Road 0/80 Star or Jammin' Journey 60 Star
+- added the option to split on grand stars that are a warp. Useful for categories that don't end on fadeout
+	like Star Road 0/80 Star
 
 Small fixes
 - key splits no longer require a star count condition
