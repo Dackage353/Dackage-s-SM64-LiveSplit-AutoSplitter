@@ -59,8 +59,9 @@ Course Labels
 -------------
 
 Below are the course labels included by default. They are not case sensitive
-- try using this helper to find level id's (PJ64v1.6 only?) https://github.com/aglab2/LiveSplitAutoSplitters/releases/tag/helper
-	or potentially use quad https://github.com/DavidSM64/Quad64/releases
+- the easiest way to find level id's that aren't obvious is probably STROOP. Add the "Misc" tab if it isn't there 
+	already, then look for "Stage Index." Then you can match that number with the numbers below. Decomp hacks probably won't work.
+	https://github.com/SM64-TAS-ABC/STROOP
 
 9  aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
 24 aka 0x18: "Course 2", "C2", "C02" // Whomp's Fortress<br />
@@ -100,6 +101,7 @@ ASL File Customization
 
 There are additional settings you can customize, though for now it must be done in the .asl file
 - any basic text editor will do, but I've been using Notepad++. If you do, change the language to C#
+	so that it looks nicer.
 - .asl uses C# code (.NET Framework 4.6.1)
 
 The settings were made to be easy to change

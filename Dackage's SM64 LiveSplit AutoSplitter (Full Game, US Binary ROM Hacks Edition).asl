@@ -43,6 +43,7 @@ startup
 	
 	vars.AddressSearchInterval = 1000;
 	vars.DeleteFileADuration = 4 * 60;
+	vars.numVBlanksToStartLimit = 5;
 	#endregion
 	
 	#region Initialize settings
@@ -487,7 +488,7 @@ start
 		return old.levelID == 35 && current.levelID == 16 && current.starCount == 0;
 	}
 	
-	return current.numVBlanks < old.numVBlanks;
+	return current.numVBlanks < old.numVBlanks && current.numVBlanks <= vars.numVBlanksToStartLimit;
 }
 
 onStart
