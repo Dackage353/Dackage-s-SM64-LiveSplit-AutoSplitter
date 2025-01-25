@@ -72,14 +72,14 @@ Below are the course labels included by default. They are not case sensitive
 	already, then look for "Stage Index." Then you can match that number with the numbers below. Decomp hacks won't work.
 	https://github.com/SM64-TAS-ABC/STROOP
 
-9  aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
+9 &nbsp;aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
 24 aka 0x18: "Course 2", "C2", "C02" // Whomp's Fortress<br />
 12 aka 0x0C: "Course 3", "C3", "C03" // Jolly Roger Bay<br />
-5  aka 0x05: "Course 4", "C4", "C04" // Cool, Cool Mountain<br />
-4  aka 0x04: "Course 5", "C5", "C05" // Big Boo's Haunt<br />
-7  aka 0x07: "Course 6", "C6", "C06" // Hazy Maze Cave<br />
+5 &nbsp;aka 0x05: "Course 4", "C4", "C04" // Cool, Cool Mountain<br />
+4 &nbsp;aka 0x04: "Course 5", "C5", "C05" // Big Boo's Haunt<br />
+7 &nbsp;aka 0x07: "Course 6", "C6", "C06" // Hazy Maze Cave<br />
 22 aka 0x16: "Course 7", "C7", "C07" // Lethal Lava Land<br />
-8  aka 0x08: "Course 8", "C8", "C08" // Shifting Sand Land<br />
+8 &nbsp;aka 0x08: "Course 8", "C8", "C08" // Shifting Sand Land<br />
 23 aka 0x17: "Course 9", "C9", "C09" // Dire, Dire Docks<br />
 10 aka 0x0A: "Course 10", "C10" // Snowman's Land<br />
 11 aka 0x0B: "Course 11", "C11" // Wet-Dry World<br />
@@ -88,7 +88,7 @@ Below are the course labels included by default. They are not case sensitive
 14 aka 0x0E: "Course 14", "C14" // Tick Tock Clock<br />
 15 aka 0x0F: "Course 15", "C15" // Rainbow Ride<br />
 16 aka 0x10: "Overworld 1", "OW1" // Castle Grounds<br />
-6  aka 0x06: "Overworld 2", "OW2" // Inside Castle<br />
+6 &nbsp;aka 0x06: "Overworld 2", "OW2" // Inside Castle<br />
 26 aka 0x1A: "Overworld 3", "OW3" // Castle Courtyard<br />
 17 aka 0x11: "Bowser Course 1", "Bowser 1", "BC1", "B1" // Bowser in the Dark World (Course)<br />
 19 aka 0x13: "Bowser Course 2", "Bowser 2", "BC2", "B2" // Bowser in the Fire Sea (Course)<br />
