@@ -72,7 +72,7 @@ Below are the course labels included by default. They are not case sensitive
 	already, then look for "Stage Index." Then you can match that number with the numbers below. Decomp hacks won't work.
 	https://github.com/SM64-TAS-ABC/STROOP
 
-9&nbsp;&nbsp;aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
+9 &nbsp; aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
 24 aka 0x18: "Course 2", "C2", "C02" // Whomp's Fortress<br />
 12 aka 0x0C: "Course 3", "C3", "C03" // Jolly Roger Bay<br />
 5 &nbsp; aka 0x05: "Course 4", "C4", "C04" // Cool, Cool Mountain<br />
