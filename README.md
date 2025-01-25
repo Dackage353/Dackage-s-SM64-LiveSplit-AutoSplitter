@@ -1,11 +1,11 @@
 # Dackage's SM64 LiveSplit AutoSplitter
 
 Wanting to add the ability to use course labels, I looked into making my autosplitter version. This is
-	functionally very similiar to aglab2's LiveSplit.SuperMario64.asl autosplitter and is what I built off of
+	functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of
 	https://github.com/aglab2/LiveSplitAutoSplitters
 
 Notes
-- this is only made for binary ROM hacks of the US version of SM64. (Which is most hacks)
+- this is only made for binary ROM hacks of the US version of SM64. (Which is most hacks) Decomp hacks will not work
 - only full game speedruns were in mind in making this. Stage RTA may not work well
 
 New features and changes
@@ -54,13 +54,21 @@ All conditions must be separate from other words/terms in the split names (meani
 - in "enter [OW2]" a level label would be recognized, but not in "enter [OW2]!"
 - in "side star (35) + R" a reset keyword and a star count would be recognized, but not in "side star(35) +R"
 
+----------
+Common Issues
+----------
+- "keys are not working." Keys only work on File A at the moment
+- "it didn't split after collecting an overworld star like toad or red coins." This is because my autosplitter waits for a level change by default.
+	You can add a "-c" or "-classic" on the end of the split name, or plan for it to split on a level change instead. If you want it to
+	behave like this by default, you can change the "vars.SplitOption_Default" from "level" to "classic" in the .asl file
+
 -------------
 Course Labels
 -------------
 
 Below are the course labels included by default. They are not case sensitive
-- the easiest way to find level id's that aren't obvious is probably STROOP. Add the "Misc" tab if it isn't there 
-	already, then look for "Stage Index." Then you can match that number with the numbers below. Decomp hacks probably won't work.
+- the easiest way to find level id's that aren't obvious is probably STROOP. Add the "Misc" tab if it isn't there
+	already, then look for "Stage Index." Then you can match that number with the numbers below. Decomp hacks won't work.
 	https://github.com/SM64-TAS-ABC/STROOP
 
 9  aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
