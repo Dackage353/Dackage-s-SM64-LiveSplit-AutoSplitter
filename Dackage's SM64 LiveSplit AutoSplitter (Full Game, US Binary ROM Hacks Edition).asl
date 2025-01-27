@@ -445,7 +445,7 @@ split
 		#endregion
 		
 		#region Handle key, star count, or level id splits
-		bool levelChanged = current.levelID != old.levelID;
+		bool levelChanged = current.levelID != old.levelID && old.levelID != 1;
 		if (vars.splitContainsKey || vars.splitStarCount != -1)
 		{
 			if (vars.splitOption == null)
