@@ -4,7 +4,7 @@ state("retroarch") { }
 startup
 {
 	#region Editable settings and constants
-	refreshRate = 30;
+	refreshRate = 60;
 	
 	// Not case sensitive
 	vars.SplitOption_ClassicKeywords = new string[] { "c", "classic" };
