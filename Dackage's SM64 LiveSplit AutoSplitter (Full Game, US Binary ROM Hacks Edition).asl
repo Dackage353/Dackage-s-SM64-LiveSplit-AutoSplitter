@@ -165,13 +165,12 @@ update
 		{
 			vars.stopwatch.Start();
 			vars.baseRAMAddress = IntPtr.Zero;
-			
-			if (!vars.retroarch)
+
 			{
 				// Hardcoded values because GetSystemInfo / GetNativeSystemInfo can't return info for remote process
 				var min = 0x10000L;
 				var max = game.Is64Bit() ? 0x00007FFFFFFEFFFFL : 0xFFFFFFFFL;
-				
+
 				var mbiSize = (UIntPtr) 0x30; // Clueless
 				
 				var addr = min;
@@ -194,20 +193,57 @@ update
 					
 					if (((int) mbi.Protect & (int) 0xcc) == 0)
 						continue;
-					
-					uint val;
-					if (!game.ReadValue(mbi.BaseAddress, out val))
+
+					if (vars.retroarch)
 					{
-						continue;
+	                    ulong size = (ulong)mbi.RegionSize;
+						bool ramFound = false;
+						if (size >= 0x800000)
+						{
+							ulong align = 0x10000;
+							ulong address = (ulong) mbi.BaseAddress;
+							ulong addressAlignedStart = (address + align - 1) / align * align;
+							ulong addressAlignedEnd   = (address + size) / align * align;
+
+							for (ulong probe = addressAlignedStart; probe <= addressAlignedEnd; probe += align)
+							{
+								uint val;
+								var probeAddr = (IntPtr) probe;
+								bool readSuccess = game.ReadValue(probeAddr, out val);
+								if (readSuccess)
+								{
+									if ((val & 0xfffff000) == 0x3C1A8000)
+									{
+										vars.baseRAMAddress = probeAddr;
+										ramFound = true;
+										break;
+									}
+								}
+							}
+						}
+
+						if (ramFound)
+						{
+							break;
+						}
 					}
-					if ((val & 0xfffff000) == 0x3C1A8000)
+					else
 					{
-						vars.baseRAMAddress = mbi.BaseAddress;
-						break;
+						uint val;
+						if (!game.ReadValue(mbi.BaseAddress, out val))
+						{
+							continue;
+						}
+						if ((val & 0xfffff000) == 0x3C1A8000)
+						{
+							vars.baseRAMAddress = mbi.BaseAddress;
+							break;
+						}
 					}
 				} while (addr < max);
 			}
-			else
+
+			if (vars.retroarch)
 			{
 				var parallelModule = modules.Where(x => x.ModuleName.Contains("parallel_n64")).First();
 				var parallelStart = (long) parallelModule.BaseAddress;
