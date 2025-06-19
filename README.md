@@ -111,7 +111,7 @@ ASL File Customization
 There are additional settings you can customize, though for now it must be done in the .asl file
 - any basic text editor will do, but I've been using Notepad++. If you do, change the language to C#
 	so that it looks nicer.
-- .asl uses C# code (.NET Framework 4.6.1)
+- .asl uses C# code (.NET Framework 4.8.1)
 
 The settings were made to be easy to change
 - the default key and star count split option can be changed. Can use -l or -level for level change if
