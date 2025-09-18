@@ -25,17 +25,16 @@ startup
     vars.ArgumentSymbol = '-';
     
     // These need changing if using another vanilla game version or a nonbinary/decomp ROM hack
-    vars.StarCountAddress = 0x0;
-    vars.LevelIDAddress = 0x0;
-    vars.AnimationIDAddress = 0x0;
-    vars.NumVBlanksAddress = 0x0;
-    vars.FileAAddress = 0x0;
-    vars.FileALength = 0x0;
+    vars.StarCountAddress = 0x1bc7cc;
+    vars.LevelIDAddress = 0x1aecda;
+    vars.AnimationIDAddress = 0x1bc730;
+    vars.NumVBlanksAddress = 0x10bca0;
+    vars.FileAAddress = 0x4cda4;
+    vars.FileALength = 0x78;
     vars.KeyByteOffset = 0x0;
     
-    vars.IGTSaveFileAddress = 0x0;
-    vars.IGTTimerOffsetAddress = 0x0;
-    vars.IGTGlobalTimerAddress = 0x0;
+    vars.IGTTimerOffsetAddress = 0x1aecd4;
+    vars.IGTGlobalTimerAddress = 0x1b0528;
     
     #endregion
     
@@ -322,7 +321,7 @@ update
     current.numVBlanks = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
     current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyByteOffset));
     
-    current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTSaveFileAddress));
+    current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
     current.igtTimerOffset = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTTimerOffsetAddress));
     current.igtGlobalTimer = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTGlobalTimerAddress));
     #endregion
