@@ -25,17 +25,16 @@ startup
     vars.ArgumentSymbol = '-';
     
     // These need changing if using another vanilla game version or a nonbinary/decomp ROM hack
-    vars.StarCountAddress = 0x1bc7cc;
-    vars.LevelIDAddress = 0x1aecda;
-    vars.AnimationIDAddress = 0x1bc730;
+    vars.StarCountAddress = 0x1bc82c;
+    vars.LevelIDAddress = 0x1aed3a;
+    vars.AnimationIDAddress = 0x1bc790;
     vars.NumVBlanksAddress = 0x10bca0;
     vars.FileAAddress = 0x4cda4;
     vars.FileALength = 0x78;
     vars.KeyByteOffset = 0x0;
     
-    vars.IGTTimerOffsetAddress = 0x1aecd4;
-    vars.IGTGlobalTimerAddress = 0x1b0528;
-    
+    vars.IGTTimerOffsetAddress = 0x1aed34;
+    vars.IGTGlobalTimerAddress = 0x1b0588;
     #endregion
     
     #region Non-editable constants
