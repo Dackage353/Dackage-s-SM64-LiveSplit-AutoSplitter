@@ -23,10 +23,12 @@ startup
     vars.LevelOpenSymbol = '[';
     vars.LevelCloseSymbol = ']';
     vars.ArgumentSymbol = '-';
+    vars.AreaSeparator = ':';
     
     // These need changing if using another vanilla game version or a nonbinary/decomp ROM hack
     vars.StarCountAddress = 0x33B218;
     vars.LevelIDAddress = 0x32DDFA;
+    vars.AreaIndexAddress = 0x33B4BF;
     vars.AnimationIDAddress = 0x33B17C;
     vars.NumVBlanksAddress = 0x32D580;
     vars.FileAAddress = 0x207708;
@@ -143,11 +145,12 @@ startup
 
 init
 {
-    current.starCount = (short) 0;
-    current.levelID = (short) 0;
-    current.animationID = (uint) 0;
-    current.numVBlanks = (uint) 0;
-    current.keyFlagsByte = (byte) 0;
+    current.starCount = 0;
+    current.levelID = 0;
+    current.areaIndex = 0;
+    current.animationID = 0;
+    current.numVBlanks = 0;
+    current.keyFlagsByte = 0;
     
     vars.baseRAMAddressFound = false;
     vars.stopwatch = new Stopwatch();
@@ -308,6 +311,7 @@ update
     #region Read memory addresses
     current.starCount = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.StarCountAddress));
     current.levelID = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
+    current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
     current.animationID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
     current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
@@ -345,6 +349,7 @@ update
             vars.splitContainsKey = false;
             vars.splitStarCount = -1;
             vars.splitLevelID = -1;
+            vars.splitAreaIndex = -1;
             vars.splitOption = null;
             
             vars.initialKey1Flag = key1Flag;
@@ -394,14 +399,30 @@ update
                     }
                     else if (term.First() == levelOpenSymbol && term.Last() == levelCloseSymbol)
                     {
+                        string idOrLabel = inside;
+                        
+                        if (inside.Contains(vars.AreaSeparator.ToString()))
+                        {
+                            string[] insideSplit = inside.Split(vars.AreaSeparator);
+                            
+                            if (insideSplit.Length == 2)
+                            {
+                                idOrLabel = insideSplit[0];
+                                
+                                int areaIndex = -1;
+                                int.TryParse(insideSplit[1], out areaIndex);
+                                vars.splitAreaIndex = areaIndex;
+                            }
+                        }
+                        
                         byte num;
-                        if (byte.TryParse(inside, out num))
+                        if (byte.TryParse(idOrLabel, out num))
                         {
                             vars.splitLevelID = num;
                         }
-                        else if (vars.levelLabelsAndIDs.ContainsKey(inside))
+                        else if (vars.levelLabelsAndIDs.ContainsKey(idOrLabel))
                         {
-                            vars.splitLevelID = vars.levelLabelsAndIDs[inside];
+                            vars.splitLevelID = vars.levelLabelsAndIDs[idOrLabel];
                         }
                     }
                     else if (term.First() == vars.ArgumentSymbol)
@@ -425,7 +446,8 @@ update
         bool passedKeyTest = !vars.splitContainsKey || (vars.initialKey1Flag != key1Flag || vars.initialKey2Flag != key2Flag);
         bool passedStarCountTest = vars.splitStarCount == -1 || current.starCount == vars.splitStarCount;
         bool passedLevelIDTest = vars.splitLevelID == -1 || current.levelID == vars.splitLevelID;
-        current.passedAllTests = passedKeyTest && passedStarCountTest && passedLevelIDTest;
+        bool passedAreaIndexTest = vars.splitAreaIndex == -1 || current.areaIndex == vars.splitAreaIndex;
+        current.passedAllTests = passedKeyTest && passedStarCountTest && passedLevelIDTest && passedAreaIndexTest;
         #endregion
     }
     
@@ -500,6 +522,8 @@ split
         
         #region Handle key, star count, or level id splits
         bool levelChanged = current.levelID != old.levelID;
+        bool areaChanged = current.areaIndex != old.areaIndex;
+        
         if (vars.splitContainsKey || vars.splitStarCount != -1)
         {
             if (vars.splitOption == null)
@@ -514,6 +538,11 @@ split
             }
             else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
             {
+                if (vars.splitAreaIndex != -1)
+                {
+                    return levelChanged || areaChanged;
+                }
+                
                 return levelChanged;
             }
             else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
@@ -527,6 +556,11 @@ split
         }
         else if (vars.splitLevelID != -1)
         {
+            if (vars.splitAreaIndex != -1)
+            {
+                return levelChanged || areaChanged;
+            }
+            
             return levelChanged;
         }
         #endregion
