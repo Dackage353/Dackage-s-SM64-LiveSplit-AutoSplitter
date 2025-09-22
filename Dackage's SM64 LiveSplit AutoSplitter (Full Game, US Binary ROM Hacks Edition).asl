@@ -145,9 +145,9 @@ startup
 init
 {
     current.starCount = (short) 0;
-    current.levelID = (byte) 0;
-    current.animationID = 0;
-    current.numVBlanks = 0;
+    current.levelID = (short) 0;
+    current.animationID = (uint) 0;
+    current.numVBlanks = (uint) 0;
     current.keyFlagsByte = (byte) 0;
     
     vars.baseRAMAddressFound = false;
@@ -308,9 +308,9 @@ update
     
     #region Read memory addresses
     current.starCount = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.StarCountAddress));
-    current.levelID = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
-    current.animationID = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
-    current.numVBlanks = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
+    current.levelID = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
+    current.animationID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
+    current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
     current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyByteOffset));
     #endregion
     
