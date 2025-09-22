@@ -31,7 +31,6 @@ startup
     vars.NumVBlanksAddress = 0x32D580;
     vars.FileAAddress = 0x207708;
     vars.FileALength = 0x70;
-    vars.KeyByteOffset = 0x0;
     #endregion
     
     #region Non-editable constants
@@ -311,7 +310,7 @@ update
     current.levelID = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
     current.animationID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyByteOffset));
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
     #endregion
     
     if (timer.CurrentPhase == TimerPhase.Running)
