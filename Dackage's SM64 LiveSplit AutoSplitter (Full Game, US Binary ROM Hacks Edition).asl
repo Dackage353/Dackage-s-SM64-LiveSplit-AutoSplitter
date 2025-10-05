@@ -471,22 +471,21 @@ update
         current.key1Flag = (current.keyFlagsByte & (1 << 4)) != 0 || (current.keyFlagsByte & (1 << 6)) != 0;
         current.key2Flag = (current.keyFlagsByte & (1 << 5)) != 0 || (current.keyFlagsByte & (1 << 7)) != 0;
         
-        bool areaFinishedLoading = vars.levelAreaPair[1] == 0xFF && current.levelID == old.levelID && current.areaNumber != old.areaNumber;
+        bool areaFinishedLoading = vars.initialAreaNumber == 0xFF && current.levelID == old.levelID && current.areaNumber != old.areaNumber;
         if (areaFinishedLoading)
         {
-            vars.levelAreaPair[1] = current.areaNumber;
+            vars.initialAreaNumber = current.areaNumber;
         }
         
         vars.isLastSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
         vars.levelChanged = current.levelID != old.levelID;
-        vars.isNewArea = current.levelID != old.levelID || (current.areaNumber != vars.levelAreaPair[1] && current.areaNumber != 0xFF);
         vars.notFromFileSelect = old.levelID != 1;
+        vars.isNewArea = current.levelID != old.levelID || (current.areaNumber != vars.initialAreaNumber && current.areaNumber != 0xFF);
         vars.isSpecificAreaAndChanged = vars.splitAreaNumber != -1 && current.areaNumber != old.areaNumber;
         
-        if (vars.levelChanged || vars.isNewArea)
+        if (vars.isNewArea)
         {
-            vars.levelAreaPair[0] = current.levelID;
-            vars.levelAreaPair[1] = current.areaNumber;
+            vars.initialAreaNumber = current.areaNumber;
         }
         
         if (vars.levelChanged && vars.notFromFileSelect) vars.splitLevelIDHasChanged = true;
@@ -572,43 +571,27 @@ split
             return true;
         }
     }
-    else if (current.passedAllTests && (vars.splitHasBasicConditions || settings["UseDefaultSplitOptionWhenNoConditions"]))
+    else if (current.passedAllTests && vars.notFromFileSelect && (vars.splitHasBasicConditions || settings["UseDefaultSplitOptionWhenNoConditions"]))
     {
         if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_ClassicKeywords, vars.splitOption))
         {
             bool xCamJustEnded = current.animationID != old.animationID && (old.animationID == 4866 ||
                 old.animationID == 4867 || old.animationID == 4871);
-            if ((vars.levelChanged && vars.notFromFileSelect) || xCamJustEnded)
-            {
-                return true;
-            }
+            return vars.levelChanged || xCamJustEnded;
         }
-        
-        if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
+        else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
         {
-            if ((vars.levelChanged || vars.isSpecificAreaAndChanged) && vars.notFromFileSelect)
-            {
-                return true;
-            }
+            return vars.levelChanged || vars.isSpecificAreaAndChanged;
         }
-        
-        if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_AreaKeywords, vars.splitOption))
+        else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_AreaKeywords, vars.splitOption))
         {
-            if ((vars.isNewArea || vars.isSpecificAreaAndChanged) && vars.notFromFileSelect)
-            {
-                return true;
-            }
+            return vars.isNewArea || vars.isSpecificAreaAndChanged;
         }
-        
-        if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
+        else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
         {
-            if (current.animationID == 4866 || current.animationID == 4867 || current.animationID == 4871)
-            {
-                return true;
-            }
+            return current.animationID == 4866 || current.animationID == 4867 || current.animationID == 4871;
         }
-        
-        if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_GrabKeywords, vars.splitOption))
+        else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_GrabKeywords, vars.splitOption))
         {
             return true;
         }
@@ -631,7 +614,7 @@ onStart
 {
     vars.deleteFileA = settings["DeleteFileA"];
     vars.numVBlanksResetOffset = 0;
-    vars.levelAreaPair = new int[] { 0xFF, 0xFF };
+    vars.initialAreaNumber = 0xFF;
     
     current.splitName = null;
     current.splitIndex = 0;
