@@ -546,7 +546,7 @@ reset
 
 split
 {
-    if (vars.isLastSplit && settings["SplitOnLastSplitStar"] || settings["SplitOnLastSplitWarp"])
+    if (vars.isLastSplit && (settings["SplitOnLastSplitStar"] || settings["SplitOnLastSplitWarp"]))
     {
         if (current.passedAllTests)
         {
