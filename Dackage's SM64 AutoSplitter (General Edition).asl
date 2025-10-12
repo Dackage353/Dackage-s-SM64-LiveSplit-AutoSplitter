@@ -63,16 +63,7 @@ startup
     {
         string splitName = timer.CurrentSplit.Name.Trim();
         
-        bool containsSubsplits = false;
-        foreach (var component in timer.Layout.Components)
-        {
-            if (component.ComponentName == "Subsplits")
-            {
-                containsSubsplits = true;
-                break;
-            }
-        }
-        
+        bool containsSubsplits = timer.Layout.Components.Any(c => c.ComponentName == "Subsplits");
         if (containsSubsplits && splitName.Length > 0)
         {
             if (splitName[0] == vars.SubsplitSectionNameOpenSymbol && splitName.Contains(vars.SubsplitSectionNameCloseSymbol.ToString()))
@@ -508,7 +499,7 @@ update
     return true;
 }
 
-// Without this, livesplit will increment the igt when the ROM is not running
+// This prevents livesplit from incrementing the igt when the ROM is not running
 isLoading
 {
     return true;
