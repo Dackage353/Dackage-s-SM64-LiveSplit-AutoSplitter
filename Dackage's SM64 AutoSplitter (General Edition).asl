@@ -29,7 +29,7 @@ startup
     // These need changing if using another vanilla game version or a nonbinary/decomp ROM hack
     vars.StarCountAddress = 0x33B218;
     vars.LevelIDAddress = 0x32DDFA;
-    vars.AreaNumberAddress = 0x33B4BF;
+    vars.AreaIndexAddress = 0x33B4BF;
     vars.AnimationIDAddress = 0x33B17C;
     vars.NumVBlanksAddress = 0x32D580;
     vars.FileAAddress = 0x207708;
@@ -149,7 +149,7 @@ init
 {
     current.starCount = 0;
     current.levelID = 0;
-    current.areaNumber = 0;
+    current.areaIndex = 0;
     current.animationID = 0;
     current.numVBlanks = 0;
     current.keyFlagsByte = 0;
@@ -313,7 +313,7 @@ update
     #region Read memory addresses
     current.starCount = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.StarCountAddress));
     current.levelID = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
-    current.areaNumber = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaNumberAddress));
+    current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
     current.animationID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
     current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
     current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
@@ -346,7 +346,7 @@ update
             vars.splitContainsKey = false;
             vars.splitStarCount = -1;
             vars.splitLevelID = -1;
-            vars.splitAreaNumber = -1;
+            vars.splitAreaIndex = -1;
             vars.splitOption = null;
             
             vars.splitHasBasicConditions = false;
@@ -423,9 +423,9 @@ update
                                 {
                                     idOrLabel = insideSplit[0];
                                     
-                                    int areaNumber = -1;
-                                    int.TryParse(insideSplit[1], out areaNumber);
-                                    vars.splitAreaNumber = areaNumber;
+                                    int areaIndex = -1;
+                                    int.TryParse(insideSplit[1], out areaIndex);
+                                    vars.splitAreaIndex = areaIndex;
                                 }
                             }
                             
@@ -471,21 +471,21 @@ update
         current.key1Flag = (current.keyFlagsByte & (1 << 4)) != 0 || (current.keyFlagsByte & (1 << 6)) != 0;
         current.key2Flag = (current.keyFlagsByte & (1 << 5)) != 0 || (current.keyFlagsByte & (1 << 7)) != 0;
         
-        bool areaFinishedLoading = vars.initialAreaNumber == 0xFF && current.levelID == old.levelID && current.areaNumber != old.areaNumber;
+        bool areaFinishedLoading = vars.newAreaIndex == 0xFF && current.levelID == old.levelID && current.areaIndex != old.areaIndex;
         if (areaFinishedLoading)
         {
-            vars.initialAreaNumber = current.areaNumber;
+            vars.newAreaIndex = current.areaIndex;
         }
         
         vars.isLastSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
         vars.levelChanged = current.levelID != old.levelID;
         vars.notFromFileSelect = old.levelID != 1;
-        vars.isNewArea = current.levelID != old.levelID || (current.areaNumber != vars.initialAreaNumber && current.areaNumber != 0xFF);
-        vars.isSpecificAreaAndChanged = vars.splitAreaNumber != -1 && current.areaNumber != old.areaNumber;
+        vars.isNewArea = current.levelID != old.levelID || (current.areaIndex != vars.newAreaIndex && current.areaIndex != 0xFF);
+        vars.isSpecificAreaAndChanged = vars.splitAreaIndex != -1 && current.areaIndex != old.areaIndex;
         
         if (vars.isNewArea)
         {
-            vars.initialAreaNumber = current.areaNumber;
+            vars.newAreaIndex = current.areaIndex;
         }
         
         if (vars.levelChanged && vars.notFromFileSelect) vars.splitLevelIDHasChanged = true;
@@ -499,9 +499,9 @@ update
             (!vars.splitOnAnyStarCountChange || vars.splitStarCountHasChanged);
         bool passedLevelIDTest = (vars.splitLevelID == -1 || current.levelID == vars.splitLevelID) &&
             (!vars.splitOnAnyLevelChange || vars.splitLevelIDHasChanged);
-        bool passedAreaNumberTest = vars.splitAreaNumber == -1 || current.areaNumber == vars.splitAreaNumber;
+        bool passedAreaIndexTest = vars.splitAreaIndex == -1 || current.areaIndex == vars.splitAreaIndex;
         
-        current.passedAllTests = passedKeyTest && passedStarCountTest && passedLevelIDTest && passedAreaNumberTest;
+        current.passedAllTests = passedKeyTest && passedStarCountTest && passedLevelIDTest && passedAreaIndexTest;
         #endregion
     }
     
@@ -614,7 +614,7 @@ onStart
 {
     vars.deleteFileA = settings["DeleteFileA"];
     vars.numVBlanksResetOffset = 0;
-    vars.initialAreaNumber = 0xFF;
+    vars.newAreaIndex = 0xFF;
     
     current.splitName = null;
     current.splitIndex = 0;
