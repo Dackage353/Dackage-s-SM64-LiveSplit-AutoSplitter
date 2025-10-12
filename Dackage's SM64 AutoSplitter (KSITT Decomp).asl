@@ -9,9 +9,10 @@ startup
     // Not case sensitive
     vars.SplitOption_ClassicKeywords = new string[] { "c", "classic" };
     vars.SplitOption_LevelKeywords = new string[] { "l", "level" };
+    vars.SplitOption_AreaKeywords = new string[] { "a", "area" };
     vars.SplitOption_XCamKeywords = new string[] { "x", "xcam" };
     vars.SplitOption_GrabKeywords = new string[] { "g", "grab" };
-    vars.SplitOption_Default = "level"; // Must match a keyword from above
+    vars.SplitOption_Default = "area"; // Must match a keyword from above
     
     // Not case sensitive
     vars.ResetKeywords = new string[] { "R", "reset" };
@@ -23,15 +24,16 @@ startup
     vars.LevelOpenSymbol = '[';
     vars.LevelCloseSymbol = ']';
     vars.ArgumentSymbol = '-';
+    vars.AreaSeparator = ':';
     
     // These need changing if using another vanilla game version or a nonbinary/decomp ROM hack
     vars.StarCountAddress = 0x1bc82c;
     vars.LevelIDAddress = 0x1aed3a;
+    vars.AreaIndexAddress = 0x1bb4e3;
     vars.AnimationIDAddress = 0x1bc790;
     vars.NumVBlanksAddress = 0x10bca0;
     vars.FileAAddress = 0x4cda4;
     vars.FileALength = 0x78;
-    vars.KeyByteOffset = 0x0;
     
     vars.IGTTimerOffsetAddress = 0x1aed34;
     vars.IGTGlobalTimerAddress = 0x1b0588;
@@ -44,7 +46,6 @@ startup
     vars.SubsplitSectionNameOpenSymbol = (char) 123;
     vars.SubsplitSectionNameCloseSymbol = (char) 125;
     
-    vars.AddressSearchInterval = 1000;
     vars.DeleteFileADuration = 4 * 60;
     vars.NumVBlanksToStartLimit = 5;
     #endregion
@@ -52,10 +53,12 @@ startup
     #region Initialize settings
     settings.Add("DeleteFileA", false, "Delete \"File A\" when a new run starts");
     
-    settings.Add("SwapStarCountAndLevelSymbols", false, "Swap the star count () and level [] symbols");
     settings.Add("SplitOnLastSplitStar", true, "Split on final split when Grand Star or regular star was grabbed");
     settings.Add("SplitOnLastSplitWarp", false, "Split on final split when warped in B3 fight (for Star Road 0/80 Star)");
     settings.Add("LastImpactStartReset", false, "Enable Last Impact start/reset mode");
+    
+    settings.Add("SwapStarCountAndLevelSymbols", false, "Swap the star count () and level [] symbols");
+    settings.Add("UseDefaultSplitOptionWhenNoConditions", false, "Use default split option on splits without conditions");
     #endregion
     
     #region Create methods
@@ -63,16 +66,7 @@ startup
     {
         string splitName = timer.CurrentSplit.Name.Trim();
         
-        bool containsSubsplits = false;
-        foreach (var component in timer.Layout.Components)
-        {
-            if (component.ComponentName == "Subsplits")
-            {
-                containsSubsplits = true;
-                break;
-            }
-        }
-        
+        bool containsSubsplits = timer.Layout.Components.Any(c => c.ComponentName == "Subsplits");
         if (containsSubsplits && splitName.Length > 0)
         {
             if (splitName[0] == vars.SubsplitSectionNameOpenSymbol && splitName.Contains(vars.SubsplitSectionNameCloseSymbol.ToString()))
@@ -147,15 +141,12 @@ startup
 
 init
 {
-    current.starCount = (short) 0;
-    current.levelID = (byte) 0;
+    current.starCount = 0;
+    current.levelID = 0;
+    current.areaIndex = 0;
     current.animationID = 0;
     current.numVBlanks = 0;
-    current.keyFlagsByte = (byte) 0;
-    
-    current.igtSaveFile = 0;
-    current.igtTimerOffset = 0;
-    current.igtGlobalTimer = 0;
+    current.keyFlagsByte = 0;
     
     vars.baseRAMAddressFound = false;
     vars.stopwatch = new Stopwatch();
@@ -170,7 +161,7 @@ update
     #region Handle baseRAMAddress
     if (!vars.baseRAMAddressFound)
     {
-        if (!vars.stopwatch.IsRunning || vars.stopwatch.ElapsedMilliseconds > vars.AddressSearchInterval)
+        if (!vars.stopwatch.IsRunning || vars.stopwatch.ElapsedMilliseconds > 1000)
         {
             vars.stopwatch.Start();
             vars.baseRAMAddress = IntPtr.Zero;
@@ -315,10 +306,11 @@ update
     
     #region Read memory addresses
     current.starCount = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.StarCountAddress));
-    current.levelID = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
-    current.animationID = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
-    current.numVBlanks = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyByteOffset));
+    current.levelID = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
+    current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
+    current.animationID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
+    current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
     
     current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
     current.igtTimerOffset = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTTimerOffsetAddress));
@@ -342,28 +334,45 @@ update
         }
         #endregion
         
-        #region Initialize split handling
+        #region Process split name on new split
         current.splitName = vars.GetSplitName();
         current.splitIndex = timer.CurrentSplitIndex;
         
-        bool key1Flag = (current.keyFlagsByte & (1 << 4)) != 0 || (current.keyFlagsByte & (1 << 6)) != 0;
-        bool key2Flag = (current.keyFlagsByte & (1 << 5)) != 0 || (current.keyFlagsByte & (1 << 7)) != 0;
-        #endregion
-        
-        #region Process split name on new split
         if (current.splitName != old.splitName || current.splitIndex != old.splitIndex)
         {
             vars.splitContainsReset = false;
             vars.splitContainsKey = false;
             vars.splitStarCount = -1;
             vars.splitLevelID = -1;
+            vars.splitAreaIndex = -1;
             vars.splitOption = null;
             
-            vars.initialKey1Flag = key1Flag;
-            vars.initialKey2Flag = key2Flag;
+            vars.splitHasBasicConditions = false;
+            vars.splitOnAnyStarCountChange = false;
+            vars.splitOnAnyLevelChange = false;
+            vars.splitStarCountHasChanged = false;
+            vars.splitLevelIDHasChanged = false;
+            vars.splitKeyHasChanged = false;
             
             string[] splitNameTerms = current.splitName.Split(null);
             splitNameTerms = splitNameTerms.Select(term => term.Trim()).ToArray();
+            
+            char starCountOpenSymbol, starCountCloseSymbol, levelOpenSymbol, levelCloseSymbol;
+            
+            if (!settings["SwapStarCountAndLevelSymbols"])
+            {
+                starCountOpenSymbol = vars.StarCountOpenSymbol;
+                starCountCloseSymbol = vars.StarCountCloseSymbol;
+                levelOpenSymbol = vars.LevelOpenSymbol;
+                levelCloseSymbol = vars.LevelCloseSymbol;
+            }
+            else
+            {
+                starCountOpenSymbol = vars.LevelOpenSymbol;
+                starCountCloseSymbol = vars.LevelCloseSymbol;
+                levelOpenSymbol = vars.StarCountOpenSymbol;
+                levelCloseSymbol = vars.StarCountCloseSymbol;
+            }
             
             foreach (string term in splitNameTerms)
             {
@@ -379,41 +388,54 @@ update
                 {
                     string inside = term.Substring(1, term.Length - 2).Trim();
                     
-                    char starCountOpenSymbol, starCountCloseSymbol, levelOpenSymbol, levelCloseSymbol;
-                    
-                    if (!settings["SwapStarCountAndLevelSymbols"])
-                    {
-                        starCountOpenSymbol = vars.StarCountOpenSymbol;
-                        starCountCloseSymbol = vars.StarCountCloseSymbol;
-                        levelOpenSymbol = vars.LevelOpenSymbol;
-                        levelCloseSymbol = vars.LevelCloseSymbol;
-                    }
-                    else
-                    {
-                        starCountOpenSymbol = vars.LevelOpenSymbol;
-                        starCountCloseSymbol = vars.LevelCloseSymbol;
-                        levelOpenSymbol = vars.StarCountOpenSymbol;
-                        levelCloseSymbol = vars.StarCountCloseSymbol;
-                    }
-                    
                     if (term.First() == starCountOpenSymbol && term.Last() == starCountCloseSymbol)
                     {
-                        byte num;
-                        if (byte.TryParse(inside, out num))
+                        if (inside == string.Empty)
                         {
-                            vars.splitStarCount = num;
+                            vars.splitOnAnyStarCountChange = true;
+                        }
+                        else
+                        {
+                            byte num;
+                            if (byte.TryParse(inside, out num))
+                            {
+                                vars.splitStarCount = num;
+                            }
                         }
                     }
                     else if (term.First() == levelOpenSymbol && term.Last() == levelCloseSymbol)
                     {
-                        byte num;
-                        if (byte.TryParse(inside, out num))
+                        if (inside == string.Empty)
                         {
-                            vars.splitLevelID = num;
+                            vars.splitOnAnyLevelChange = true;
                         }
-                        else if (vars.levelLabelsAndIDs.ContainsKey(inside))
+                        else
                         {
-                            vars.splitLevelID = vars.levelLabelsAndIDs[inside];
+                            string idOrLabel = inside;
+                        
+                            if (inside.Contains(vars.AreaSeparator.ToString()))
+                            {
+                                string[] insideSplit = inside.Split(vars.AreaSeparator);
+                                
+                                if (insideSplit.Length == 2)
+                                {
+                                    idOrLabel = insideSplit[0];
+                                    
+                                    int areaIndex = -1;
+                                    int.TryParse(insideSplit[1], out areaIndex);
+                                    vars.splitAreaIndex = areaIndex;
+                                }
+                            }
+                            
+                            byte num;
+                            if (byte.TryParse(idOrLabel, out num))
+                            {
+                                vars.splitLevelID = num;
+                            }
+                            else if (vars.levelLabelsAndIDs.ContainsKey(idOrLabel))
+                            {
+                                vars.splitLevelID = vars.levelLabelsAndIDs[idOrLabel];
+                            }
                         }
                     }
                     else if (term.First() == vars.ArgumentSymbol)
@@ -422,6 +444,7 @@ update
                         
                         if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_ClassicKeywords, argument) ||
                             vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, argument) ||
+                            vars.StringArrayContains_IgnoreCase(vars.SplitOption_AreaKeywords, argument) ||
                             vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, argument) ||
                             vars.StringArrayContains_IgnoreCase(vars.SplitOption_GrabKeywords, argument))
                         {
@@ -430,21 +453,60 @@ update
                     }
                 }
             }
+            
+            vars.splitHasBasicConditions = vars.splitContainsKey || vars.splitStarCount != -1 ||
+                vars.splitLevelID != -1 || vars.splitOption != null || vars.splitOnAnyStarCountChange ||
+                vars.splitOnAnyLevelChange;
+                
+            if (vars.splitOption == null)
+            {
+                vars.splitOption = vars.SplitOption_Default;
+            }
         }
         #endregion
         
+        #region Process split values
+        current.key1Flag = (current.keyFlagsByte & (1 << 4)) != 0 || (current.keyFlagsByte & (1 << 6)) != 0;
+        current.key2Flag = (current.keyFlagsByte & (1 << 5)) != 0 || (current.keyFlagsByte & (1 << 7)) != 0;
+        
+        bool areaFinishedLoading = vars.newAreaIndex == 0xFF && current.levelID == old.levelID && current.areaIndex != old.areaIndex;
+        if (areaFinishedLoading)
+        {
+            vars.newAreaIndex = current.areaIndex;
+        }
+        
+        vars.isLastSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
+        vars.levelChanged = current.levelID != old.levelID;
+        vars.notFromFileSelect = old.levelID != 1;
+        vars.isNewArea = current.levelID != old.levelID || (current.areaIndex != vars.newAreaIndex && current.areaIndex != 0xFF);
+        vars.isSpecificAreaAndChanged = vars.splitAreaIndex != -1 && current.areaIndex != old.areaIndex;
+        
+        if (vars.isNewArea)
+        {
+            vars.newAreaIndex = current.areaIndex;
+        }
+        
+        if (vars.levelChanged && vars.notFromFileSelect) vars.splitLevelIDHasChanged = true;
+        if (current.starCount != old.starCount) vars.splitStarCountHasChanged = true;
+        if (current.key1Flag != old.key1Flag || current.key2Flag != old.key2Flag) vars.splitKeyHasChanged = true;
+        #endregion
+        
         #region Test split info against current values
-        bool passedKeyTest = !vars.splitContainsKey || (vars.initialKey1Flag != key1Flag || vars.initialKey2Flag != key2Flag);
-        bool passedStarCountTest = vars.splitStarCount == -1 || current.starCount == vars.splitStarCount;
-        bool passedLevelIDTest = vars.splitLevelID == -1 || current.levelID == vars.splitLevelID;
-        current.passedAllTests = passedKeyTest && passedStarCountTest && passedLevelIDTest;
+        bool passedKeyTest = !vars.splitContainsKey || (vars.splitKeyHasChanged);
+        bool passedStarCountTest = (vars.splitStarCount == -1 || current.starCount == vars.splitStarCount) &&
+            (!vars.splitOnAnyStarCountChange || vars.splitStarCountHasChanged);
+        bool passedLevelIDTest = (vars.splitLevelID == -1 || current.levelID == vars.splitLevelID) &&
+            (!vars.splitOnAnyLevelChange || vars.splitLevelIDHasChanged);
+        bool passedAreaIndexTest = vars.splitAreaIndex == -1 || current.areaIndex == vars.splitAreaIndex;
+        
+        current.passedAllTests = passedKeyTest && passedStarCountTest && passedLevelIDTest && passedAreaIndexTest;
         #endregion
     }
     
     return true;
 }
 
-// Without this, livesplit will increment the igt when the ROM is not running
+// This prevents livesplit from incrementing the igt when the ROM is not running
 isLoading
 {
     return true;
@@ -482,18 +544,9 @@ reset
 
 split
 {
-    #region Handle reset splits
-    if (old.passedAllTests && vars.splitContainsReset)
+    if (vars.isLastSplit && (settings["SplitOnLastSplitStar"] || settings["SplitOnLastSplitWarp"]))
     {
-        return current.numVBlanks < old.numVBlanks;
-    }
-    #endregion
-    
-    if (current.passedAllTests)
-    {
-        #region Handle last split splitting
-        bool isLastSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
-        if (isLastSplit)
+        if (current.passedAllTests)
         {
             if (settings["SplitOnLastSplitStar"])
             {
@@ -508,42 +561,40 @@ split
                 return true;
             }
         }
-        #endregion
-        
-        #region Handle key, star count, or level id splits
-        bool levelChanged = current.levelID != old.levelID;
-        if (vars.splitContainsKey || vars.splitStarCount != -1)
-        {
-            if (vars.splitOption == null)
-            {
-                vars.splitOption = vars.SplitOption_Default;
-            }
-            
-            if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_ClassicKeywords, vars.splitOption))
-            {
-                bool xCamJustEnded = current.animationID != old.animationID && (old.animationID == 4866 || old.animationID == 4867 || old.animationID == 4871);
-                return levelChanged || xCamJustEnded;
-            }
-            else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
-            {
-                return levelChanged;
-            }
-            else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
-            {
-                return current.animationID == 4866 || current.animationID == 4867 || current.animationID == 4871;
-            }
-            else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_GrabKeywords, vars.splitOption))
-            {
-                return true;
-            }
-        }
-        else if (vars.splitLevelID != -1)
-        {
-            return levelChanged;
-        }
-        #endregion
     }
-    
+    else if (vars.splitContainsReset)
+    {
+        if (old.passedAllTests && current.numVBlanks < old.numVBlanks)
+        {
+            return true;
+        }
+    }
+    else if (current.passedAllTests && vars.notFromFileSelect && (vars.splitHasBasicConditions || settings["UseDefaultSplitOptionWhenNoConditions"]))
+    {
+        if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_ClassicKeywords, vars.splitOption))
+        {
+            bool xCamJustEnded = current.animationID != old.animationID && (old.animationID == 4866 ||
+                old.animationID == 4867 || old.animationID == 4871);
+            return vars.levelChanged || xCamJustEnded;
+        }
+        else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
+        {
+            return vars.levelChanged || vars.isSpecificAreaAndChanged;
+        }
+        else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_AreaKeywords, vars.splitOption))
+        {
+            return vars.isNewArea || vars.isSpecificAreaAndChanged;
+        }
+        else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
+        {
+            return current.animationID == 4866 || current.animationID == 4867 || current.animationID == 4871;
+        }
+        else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_GrabKeywords, vars.splitOption))
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -561,8 +612,11 @@ onStart
 {
     vars.deleteFileA = settings["DeleteFileA"];
     vars.numVBlanksResetOffset = 0;
+    vars.newAreaIndex = 0xFF;
     
     current.splitName = null;
     current.splitIndex = 0;
     current.passedAllTests = false;
+    current.key1Flag = false;
+    current.key2Flag = false;
 }

@@ -1,33 +1,75 @@
 state("project64") { }
 state("retroarch") { }
 
+/*
+
+gMarioStates
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/types.h#L255
+- struct MarioState
+- 0x8033B170
+
+gMarioStates -> numStars
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/types.h#L302
+- s16 (signed short)
+- 0x8033B170 + 0xAA = 0x8033B21A
+
+gCurrLevelNum
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/area.c#L53
+- s16 (signed short)
+- 0x8032DDF8
+
+gPlayerSpawnInfos
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/area.h#L33
+- struct SpawnInfo
+- 0x8033b4b0
+
+gPlayerSpawnInfos -> areaIndex
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/area.h#L36C2-L36C3
+- u8 (unsigned byte)
+- 0x8033b4b0 + 0xC
+
+gMarioStates -> action
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/types.h#L260C18-L260C24
+- u32 (unsigned int)
+- 0x8033B170 + 0x0C = 0x8033B17C
+
+gNumVblanks
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/main.c#L52
+- u32 (unsigned int)
+- 0x8032D580
+
+gSaveBuffer
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/save_file.h#L66
+- struct SaveBuffer
+- 0x80207700
+
+*/
+
 startup
 {
     vars.StarCountAddress = 0x1bc82c;
     vars.LevelIDAddress = 0x1aed3a;
+    vars.AreaIndexAddress = 0x1bb4e3;
     vars.AnimationIDAddress = 0x1bc790;
     vars.NumVBlanksAddress = 0x10bca0;
     vars.FileAAddress = 0x4cda4;
     vars.FileALength = 0x78;
-    vars.KeyByteOffset = 0x0;
     
     vars.IGTTimerOffsetAddress = 0x1aed34;
     vars.IGTGlobalTimerAddress = 0x1b0588;
     
+	settings.Add("CompileCheck", false, "If you see this it compiled");
     vars.AddressSearchInterval = 1000;
 }
 
 init
 {
-    current.starCount = (short) 0;
-    current.levelID = (byte) 0;
+    current.starCount = 0;
+    current.levelID = 0;
+    current.areaIndex = 0;
     current.animationID = 0;
     current.numVBlanks = 0;
-    current.keyFlagsByte = (byte) 0;
-    
-    current.igtSaveFile = 0;
-    current.igtTimerOffset = 0;
-    current.igtGlobalTimer = 0;
+    current.keyFlagsByte = 0;
     
     vars.baseRAMAddressFound = false;
     vars.stopwatch = new Stopwatch();
@@ -187,10 +229,11 @@ update
     
     #region Read memory addresses
     current.starCount = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.StarCountAddress));
-    current.levelID = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
-    current.animationID = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
-    current.numVBlanks = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
-    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress + vars.KeyByteOffset));
+    current.levelID = memory.ReadValue<short>((IntPtr) (vars.baseRAMAddress + vars.LevelIDAddress));
+    current.areaIndex = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.AreaIndexAddress));
+    current.animationID = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.AnimationIDAddress));
+    current.numVBlanks = memory.ReadValue<uint> ((IntPtr) (vars.baseRAMAddress + vars.NumVBlanksAddress));
+    current.keyFlagsByte = memory.ReadValue<byte>((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
     
     current.igtSaveFile = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.FileAAddress));
     current.igtTimerOffset = memory.ReadValue<int> ((IntPtr) (vars.baseRAMAddress + vars.IGTTimerOffsetAddress));
@@ -200,30 +243,12 @@ update
     var sb = new StringBuilder();
     sb.Append("starCount: " + current.starCount);
     sb.Append(" - levelID: " + current.levelID);
+    sb.Append(" - areaIndex: " + current.areaIndex);
     sb.Append(" - animationID: " + current.animationID);
     sb.Append(" - numVBlanks: " + current.numVBlanks);
     sb.Append(" - keyFlagsByte: " + current.keyFlagsByte);
-    sb.Append(" - igtSaveFile: " + current.igtSaveFile);
-    sb.Append(" - igtTimerOffset: " + current.igtTimerOffset);
-    sb.Append(" - igtGlobalTimer: " + current.igtGlobalTimer);
     
     print(sb.ToString());
     
     return true;
-}
-
-// Without this, livesplit will increment the igt when the ROM is not running
-isLoading
-{
-    return true;
-}
-
-gameTime
-{
-    if (current.igtTimerOffset == 0 || current.levelID == 1)
-    {
-        return TimeSpan.FromSeconds(current.igtSaveFile / 30.0);
-    }
-    
-    return TimeSpan.FromSeconds((current.igtSaveFile + current.igtGlobalTimer - current.igtTimerOffset) / 30.0);
 }
