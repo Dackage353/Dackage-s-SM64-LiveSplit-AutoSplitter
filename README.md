@@ -35,12 +35,12 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 ----------
 ## Course Labels
 
-The easiest way to find level id's is probably STROOP. Decomp hacks won't work.
+#### The easiest way to find level id's is probably STROOP. Decomp hacks won't work.
 - https://github.com/SM64-TAS-ABC/STROOP
 - Add the "Misc" tab if it isn't there already, then look for "Stage Index."
 - Then you can match that number with the numbers below.
 
-Below are the course labels included by default. They are not case sensitive
+#### These are the course labels included by default. They are not case sensitive
 - 9 (0x09): "Course 1", "C1", "C01" // Bob-omb Battlefield
 - 24 (0x18): "Course 2", "C2", "C02" // Whomp's Fortress
 - 12 (0x0C): "Course 3", "C3", "C03" // Jolly Roger Bay
