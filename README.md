@@ -1,7 +1,7 @@
 # Dackage's SM64 LiveSplit AutoSplitter
 
 Wanting to add the ability to use course labels, I looked into making my autosplitter version. This is
-	functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of
+	functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of.
 - https://github.com/aglab2/LiveSplitAutoSplitters
 
 Main Features
@@ -11,14 +11,14 @@ Main Features
 - split on fadeout after key get: e.g. "key 1 fight" or "bowser 1 key" // Use the word "key" somewhere
 - split on reset: e.g. "star 1 + R" or "top star then reset" // Include "R" or "reset" somewhere
 - split on Grand Star // See the advanced options in the livesplit layout
-- use the in-game timer
+- in-game timer (this uses the number of drawn frames rather than the true in-game global timer)
 
 Compatibility
 - Any Project64 version
 - Parallel Launcher
 
 ----------
-Common Issues
+### Common Issues
 ----------
 "It won't split"
 - Check that conditions are separated by a space. Like "star (1)" and not "star(1)"
