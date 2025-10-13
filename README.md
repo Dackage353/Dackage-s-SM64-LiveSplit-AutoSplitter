@@ -4,72 +4,40 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 	functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of
 	https://github.com/aglab2/LiveSplitAutoSplitters
 
-Notes
-- this is only made for binary ROM hacks of the US version of SM64. (Which is most hacks) Decomp hacks will not work
-- only full game speedruns were in mind in making this. Stage RTA may not work well
+Main Features
+- split on level entry: e.g. [C1] or [B1] or [WC] // See the bottom of the readme for a complete list
+- split on specific area: e.g. [C1:3] or [B1:2] // The area index starts at 1
+- split on fadeout after star count: e.g. (20) or (53)
+- split on fadeout after key get: e.g. "key 1 fight" or "bowser 1 key" // Use the word "key" somewhere
+- split on reset: e.g. "star 1 + R" or "top star then reset" // Include "R" or "reset" somewhere
+- split on Grand Star // See the advanced options in the livesplit layout
+- use the in-game timer
 
-New features and changes
-- can use course labels instead of level id's e.g. [C1], [B1], or [WC]. You're still able to use level id's if desired.
-	See the bottom of the readme for a complete list
-- can now use multiple split conditions e.g. "get toad (20) and enter [C8]".
-- split conditions can now be anywhere in the split name. (Previously they had to be at the end)
-- added the option to split on grand stars that are a warp. Useful for categories that don't end on fadeout
-	like Star Road 0/80 Star
-
-Small fixes
-- key splits no longer require a star count condition
-- skipping a split after collecting a star won't autosplit on level change
-- fix for the autosplitting not always working after water star/key animations
-
-Retained features
-- ability to split on final star, reset, key, star count, or level id
-- compatibility with a variety of emulators including the many Project64's and parallel launcher
-- delete file A on reset
-- Last Impact mode
-- igt
-
-Removed features
-- split on music change is removed for now, but I've never seen anyone use this
-
-----------
-Conditions
-----------
-
-Conditions are not case sensitive
-
-- for a reset split, add "R" or "reset"
-- for a key split, add "key"
-- to add a star count condition, add it with parentheses e.g. (10) or (128)
-- to add a level id/label condition, add it with square brackets e.g. [9] or [C1]
-
-For key and star count splits, there are 4 options for split timing. Level change is the default for golds accuracy but
-	there's also xcam, grab, and classic
-- classic is the aglab autosplitter behavior. It will split after a fadeout or after Mario is actionable after the save
-	prompt for a nonstop star/key. This is most useful for stars that warp you back to the same level.
-- to specify which split option you want, you can add -x or -xcam for xcam, -g or -grab for grab, -c
-	or -classic for classic
-
-All conditions must be separate from other words/terms in the split names (meaning separated by a space or other whitespace)
-	For Example:
-- in "key 1 fight" a key keyword would be recognized, but not in "key1 fight"
-- in "enter [OW2]" a level label would be recognized, but not in "enter [OW2]!"
-- in "side star (35) + R" a reset keyword and a star count would be recognized, but not in "side star(35) +R"
+Compatibility
+- Any Project64 version
+- Parallel Launcher
 
 ----------
 Common Issues
 ----------
-- "keys are not working." Keys only work on File A at the moment
-- "it didn't split after collecting an overworld star like toad or red coins." This is because my autosplitter waits for a level change by default.
-	You can add a "-c" or "-classic" on the end of the split name, or plan for it to split on a level change instead. If you want it to
-	behave like this by default, you can change the "vars.SplitOption_Default" from "level" to "classic" in the .asl file
+"It won't split"
+- Check that conditions are separated by a space. Like "star (1)" and not "star(1)"
+- You can edit split names during the run and it will probably work.
+
+"Keys aren't working"
+- Keys only work on File A at the moment. I want to fix this eventually
+
+"How to split on toad stars" 
+- The splitter waits for an area change by default to split. It's recommended to do it this way for accurate golds.
+- If you wish, you can split on star grab or xcam by adding -g or -x to the split name e.g. "toad star (32) -g"
 
 -------------
 Course Labels
 -------------
 
 Below are the course labels included by default. They are not case sensitive
-- the easiest way to find level id's that aren't obvious is probably STROOP. Add the "Misc" tab if it isn't there
-	already, then look for "Stage Index." Then you can match that number with the numbers below. Decomp hacks won't work.
+- the easiest way to find level id's is probably STROOP. Add the "Misc" tab if it isn't there already, then look for "Stage Index."
+    Then you can match that number with the numbers below. Decomp hacks won't work.
 	https://github.com/SM64-TAS-ABC/STROOP
 
 &nbsp; 9 aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield<br />
@@ -109,36 +77,32 @@ ASL File Customization
 ----------------------
 
 There are additional settings you can customize, though for now it must be done in the .asl file
-- any basic text editor will do, but I've been using Notepad++. If you do, change the language to C#
-	so that it looks nicer.
+- any basic text editor will do, but I've been using VS Code. If you do, you can change the language to C#
+	so that it's easier to read.
 - .asl uses C# code (.NET Framework 4.8.1)
 
-The settings were made to be easy to change
-- the default key and star count split option can be changed. Can use -l or -level for level change if
-	you change this. Look for:<br />
-	vars.SplitOption_Default = "level";<br />
+The split option can be changed. By default it's "area" but you can also do level, grab, xcam, or classic.
+- Look for: vars.SplitOption_Default = "area";
 	
-- you can add or remove specific key or reset keywords. Look for:<br />
-	vars.ResetKeywords = new string[] { "R", "reset" };<br />
-	vars.KeyKeywords = new string[] { "key" };<br />
+You can add or remove specific key or reset keywords. Look for:
+- vars.ResetKeywords = new string[] { "R", "reset" };
+- vars.KeyKeywords = new string[] { "key" };
 	
-- you can add or remove course labels as desired. Note that different areas within a level share the
-	same level id. Look for:<br />
-	#region Add course labels<br />
+You can add or remove course labels as desired. Note that different areas within a level share the
+	same level id. Look for:
+- #region Add course labels
 
 --------------
 Code Reference
 --------------
 
-Animation ID's<br />
-4864 aka 0x1300: warp hole<br />
-<br />
-4866 aka 0x1302: land star/key dance, exit<br />
-4867 aka 0x1303: water star dance<br />
-4871 aka 0x1307: land star/key dance, no exit<br />
-<br />
-6404 aka 0x1904: falling after star grab<br />
-6409 aka 0x1909: Grand Star grab<br />
+Animation ID's
+- 4864 aka 0x1300: warp hole
+- 4866 aka 0x1302: land star/key dance, exit
+- 4867 aka 0x1303: water star dance
+- 4871 aka 0x1307: land star/key dance, no exit
+- 6404 aka 0x1904: falling after star grab
+- 6409 aka 0x1909: Grand Star grab
 
 --------------
 Special Thanks
