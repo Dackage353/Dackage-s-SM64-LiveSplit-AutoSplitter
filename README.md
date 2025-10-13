@@ -17,6 +17,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 - Any Project64 version
 - Parallel Launcher
 
+----------
 ## Common Issues
 
 "It won't split"
@@ -30,6 +31,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 - The splitter waits for an area change by default to split. It's recommended to do it this way for accurate golds.
 - If you wish, you can split on star grab or xcam by adding -g or -x to the split name e.g. "toad star (32) -g"
 
+----------
 ## Course Labels
 
 The easiest way to find level id's is probably STROOP. Add the "Misc" tab if it isn't there already, then look for "Stage Index."
@@ -69,6 +71,7 @@ Below are the course labels included by default. They are not case sensitive
 - 31 (0x1F): "Secret Level 3", "Secret 3", "SL3", "S3" // Wing Mario over the Rainbow
 - 25 (0x19): "Secret Level 4", "Secret 4", "SL4", "S4", "Cake", "End" // End Cake Picture
 
+----------
 ## ASL File Customization
 
 There are additional settings you can customize, though for now it must be done in the .asl file
@@ -87,6 +90,7 @@ You can add or remove course labels as desired. Note that different areas within
 	same level id. Look for:
 - #region Add course labels
 
+----------
 ## Code Reference
 
 Animation ID's
@@ -97,6 +101,7 @@ Animation ID's
 - 6404 (0x1904): falling after star grab
 - 6409 (0x1909): Grand Star grab
 
+----------
 ## Special Thanks
 
 - DJ_Tala for help with testing
