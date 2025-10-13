@@ -4,7 +4,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 	functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of.
 - https://github.com/aglab2/LiveSplitAutoSplitters
 
-### Main Features
+#### Main Features
 - split on level entry: e.g. [C1] or [B1] or [WC] // See the bottom of the readme for a complete list
 - split on specific area: e.g. [C1:3] or [B1:2] // The area index starts at 1
 - split on fadeout after star count: e.g. (20) or (53)
@@ -17,17 +17,16 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 - Any Project64 version
 - Parallel Launcher
 
-----------
 ## Common Issues
 
-"It won't split"
+#### "It won't split"
 - Check that conditions are separated by a space. Like "star (1)" and not "star(1)"
 - You can edit split names during the run and it will probably work.
 
-"Keys aren't working"
+#### "Keys aren't working"
 - Keys only work on File A at the moment. I want to fix this eventually
 
-"How to split on toad stars" 
+#### "How to split on toad stars" 
 - The splitter waits for an area change by default to split. It's recommended to do it this way for accurate golds.
 - If you wish, you can split on star grab or xcam by adding -g or -x to the split name e.g. "toad star (32) -g"
 
@@ -38,7 +37,7 @@ The easiest way to find level id's is probably STROOP. Add the "Misc" tab if it 
     Then you can match that number with the numbers below. Decomp hacks won't work.
 - https://github.com/SM64-TAS-ABC/STROOP
 
-Below are the course labels included by default. They are not case sensitive
+#### Below are the course labels included by default. They are not case sensitive
 - 9 aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield
 - 24 aka 0x18: "Course 2", "C2", "C02" // Whomp's Fortress
 - 12 aka 0x0C: "Course 3", "C3", "C03" // Jolly Roger Bay
@@ -75,19 +74,19 @@ Below are the course labels included by default. They are not case sensitive
 ASL File Customization
 ----------------------
 
-There are additional settings you can customize, though for now it must be done in the .asl file
+#### There are additional settings you can customize, though for now it must be done in the .asl file
 - any basic text editor will do, but I've been using VS Code. If you do, you can change the language to C#
 	so that it's easier to read.
 - .asl uses C# code (.NET Framework 4.8.1)
 
-The split option can be changed. By default it's "area" but you can also do level, grab, xcam, or classic.
+#### The split option can be changed. By default it's "area" but you can also do level, grab, xcam, or classic.
 - Look for: vars.SplitOption_Default = "area";
 	
-You can add or remove specific key or reset keywords. Look for:
+#### You can add or remove specific key or reset keywords. Look for:
 - vars.ResetKeywords = new string[] { "R", "reset" };
 - vars.KeyKeywords = new string[] { "key" };
 	
-You can add or remove course labels as desired. Note that different areas within a level share the
+#### You can add or remove course labels as desired. Note that different areas within a level share the
 	same level id. Look for:
 - #region Add course labels
 
