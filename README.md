@@ -4,7 +4,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 	functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of.
 - https://github.com/aglab2/LiveSplitAutoSplitters
 
-Main Features
+### Main Features
 - split on level entry: e.g. [C1] or [B1] or [WC] // See the bottom of the readme for a complete list
 - split on specific area: e.g. [C1:3] or [B1:2] // The area index starts at 1
 - split on fadeout after star count: e.g. (20) or (53)
@@ -13,13 +13,13 @@ Main Features
 - split on Grand Star // See the advanced options in the livesplit layout
 - in-game timer (this uses the number of drawn frames rather than the true in-game global timer)
 
-Compatibility
+#### Compatibility
 - Any Project64 version
 - Parallel Launcher
 
 ----------
-### Common Issues
-----------
+## Common Issues
+
 "It won't split"
 - Check that conditions are separated by a space. Like "star (1)" and not "star(1)"
 - You can edit split names during the run and it will probably work.
@@ -32,8 +32,7 @@ Compatibility
 - If you wish, you can split on star grab or xcam by adding -g or -x to the split name e.g. "toad star (32) -g"
 
 -------------
-Course Labels
--------------
+## Course Labels
 
 The easiest way to find level id's is probably STROOP. Add the "Misc" tab if it isn't there already, then look for "Stage Index."
     Then you can match that number with the numbers below. Decomp hacks won't work.
