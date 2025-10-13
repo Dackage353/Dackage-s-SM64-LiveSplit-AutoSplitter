@@ -5,7 +5,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 - https://github.com/aglab2/LiveSplitAutoSplitters
 
 #### Main Features
-- split on level entry: e.g. [C1] or [B1] or [WC] // See the bottom of the readme for a complete list
+- split on level entry: e.g. [C1] or [B1] or [WC] // See the course labels section for a complete list
 - split on specific area: e.g. [C1:3] or [B1:2] // The area index starts at 1
 - split on fadeout after star count: e.g. (20) or (53)
 - split on fadeout after key get: e.g. "key 1 fight" or "bowser 1 key" // Use the word "key" somewhere
@@ -23,6 +23,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 "It won't split"
 - Check that conditions are separated by a space. Like "star (1)" and not "star(1)"
 - You can edit split names during the run and it will probably work.
+- Also note that the main autosplitter version won't work on decomp hacks
 
 "Keys aren't working"
 - Keys only work on File A at the moment. I want to fix this eventually
@@ -34,9 +35,10 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 ----------
 ## Course Labels
 
-The easiest way to find level id's is probably STROOP. Add the "Misc" tab if it isn't there already, then look for "Stage Index."
-    Then you can match that number with the numbers below. Decomp hacks won't work.
+The easiest way to find level id's is probably STROOP. Decomp hacks won't work.
 - https://github.com/SM64-TAS-ABC/STROOP
+- Add the "Misc" tab if it isn't there already, then look for "Stage Index."
+- Then you can match that number with the numbers below.
 
 Below are the course labels included by default. They are not case sensitive
 - 9 (0x09): "Course 1", "C1", "C01" // Bob-omb Battlefield
@@ -72,9 +74,20 @@ Below are the course labels included by default. They are not case sensitive
 - 25 (0x19): "Secret Level 4", "Secret 4", "SL4", "S4", "Cake", "End" // End Cake Picture
 
 ----------
+## Arguments
+
+Use these to handle when it will split after the condition is true.
+- area: splits on an area change. Use -a or -area
+- level: splits on a level change. Use -l or -level
+- grab: splits on a star or key grab. Use -g or -grab
+- xcam: splits on the xcam after a star or key grab. Use -x or -xcam
+- classic: splits on a level change or after Mario's star dance animation ends. Useful on stars that warp you
+    back to the same level. Use -c or -classic
+
+----------
 ## ASL File Customization
 
-There are additional settings you can customize, though for now it must be done in the .asl file
+There are additional settings you can customize by editing the .asl file
 - any basic text editor will do, but I've been using VS Code. If you do, you can change the language to C#
 	so that it's easier to read.
 - .asl uses C# code (.NET Framework 4.8.1)
