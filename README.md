@@ -37,37 +37,37 @@ The easiest way to find level id's is probably STROOP. Add the "Misc" tab if it 
 - https://github.com/SM64-TAS-ABC/STROOP
 
 Below are the course labels included by default. They are not case sensitive
-- 9 aka 0x09: "Course 1", "C1", "C01" // Bob-omb Battlefield
-- 24 aka 0x18: "Course 2", "C2", "C02" // Whomp's Fortress
-- 12 aka 0x0C: "Course 3", "C3", "C03" // Jolly Roger Bay
-- 5 aka 0x05: "Course 4", "C4", "C04" // Cool, Cool Mountain
-- 4 aka 0x04: "Course 5", "C5", "C05" // Big Boo's Haunt
-- 7 aka 0x07: "Course 6", "C6", "C06" // Hazy Maze Cave
-- 22 aka 0x16: "Course 7", "C7", "C07" // Lethal Lava Land
-- 8 aka 0x08: "Course 8", "C8", "C08" // Shifting Sand Land
-- 23 aka 0x17: "Course 9", "C9", "C09" // Dire, Dire Docks
-- 10 aka 0x0A: "Course 10", "C10" // Snowman's Land
-- 11 aka 0x0B: "Course 11", "C11" // Wet-Dry World
-- 36 aka 0x24: "Course 12", "C12" // Tall, Tall Mountain
-- 13 aka 0x0D: "Course 13", "C13" // Tiny-Huge Island
-- 14 aka 0x0E: "Course 14", "C14" // Tick Tock Clock
-- 15 aka 0x0F: "Course 15", "C15" // Rainbow Ride
-- 16 aka 0x10: "Overworld 1", "OW1" // Castle Grounds
-- 6 aka 0x06: "Overworld 2", "OW2" // Inside Castle
-- 26 aka 0x1A: "Overworld 3", "OW3" // Castle Courtyard
-- 17 aka 0x11: "Bowser Course 1", "Bowser 1", "BC1", "B1" // Bowser in the Dark World (Course)
-- 19 aka 0x13: "Bowser Course 2", "Bowser 2", "BC2", "B2" // Bowser in the Fire Sea (Course)
-- 21 aka 0x15: "Bowser Course 3", "Bowser 3", "BC3", "B3" // Bowser in the Sky (Course)
-- 30 aka 0x1E: "Bowser Fight 1", "Fight 1", "BF1", "F1" // Bowser in the Dark World (Fight)
-- 33 aka 0x21: "Bowser Fight 2", "Fight 2", "BF2", "F2" // Bowser in the Fire Sea (Fight)
-- 34 aka 0x22: "Bowser Fight 3", "Fight 3", "BF3", "F3" // Bowser in the Sky (Fight)
-- 28 aka 0x1C: "Metal Cap", "MC" // Cavern of the Metal Cap
-- 29 aka 0x1D: "Wing Cap", "WC" // Tower of the Wing Cap
-- 18 aka 0x12: "Vanish Cap", "VC" // Vanish Cap Under the Moat
-- 27 aka 0x1B: "Secret Level 1", "Secret 1", "SL1", "S1" // The Princess's Secret Slide
-- 20 aka 0x14: "Secret Level 2", "Secret 2", "SL2", "S2" // Secret Aquarium
-- 31 aka 0x1F: "Secret Level 3", "Secret 3", "SL3", "S3" // Wing Mario over the Rainbow
-- 25 aka 0x19: "Secret Level 4", "Secret 4", "SL4", "S4", "Cake", "End" // End Cake Picture
+- 9 (0x09): "Course 1", "C1", "C01" // Bob-omb Battlefield
+- 24 (0x18): "Course 2", "C2", "C02" // Whomp's Fortress
+- 12 (0x0C): "Course 3", "C3", "C03" // Jolly Roger Bay
+- 5 (0x05): "Course 4", "C4", "C04" // Cool, Cool Mountain
+- 4 (0x04): "Course 5", "C5", "C05" // Big Boo's Haunt
+- 7 (0x07): "Course 6", "C6", "C06" // Hazy Maze Cave
+- 22 (0x16): "Course 7", "C7", "C07" // Lethal Lava Land
+- 8 (0x08): "Course 8", "C8", "C08" // Shifting Sand Land
+- 23 (0x17): "Course 9", "C9", "C09" // Dire, Dire Docks
+- 10 (0x0A): "Course 10", "C10" // Snowman's Land
+- 11 (0x0B): "Course 11", "C11" // Wet-Dry World
+- 36 (0x24): "Course 12", "C12" // Tall, Tall Mountain
+- 13 (0x0D): "Course 13", "C13" // Tiny-Huge Island
+- 14 (0x0E): "Course 14", "C14" // Tick Tock Clock
+- 15 (0x0F): "Course 15", "C15" // Rainbow Ride
+- 16 (0x10): "Overworld 1", "OW1" // Castle Grounds
+- 6 (0x06): "Overworld 2", "OW2" // Inside Castle
+- 26 (0x1A): "Overworld 3", "OW3" // Castle Courtyard
+- 17 (0x11): "Bowser Course 1", "Bowser 1", "BC1", "B1" // Bowser in the Dark World (Course)
+- 19 (0x13): "Bowser Course 2", "Bowser 2", "BC2", "B2" // Bowser in the Fire Sea (Course)
+- 21 (0x15): "Bowser Course 3", "Bowser 3", "BC3", "B3" // Bowser in the Sky (Course)
+- 30 (0x1E): "Bowser Fight 1", "Fight 1", "BF1", "F1" // Bowser in the Dark World (Fight)
+- 33 (0x21): "Bowser Fight 2", "Fight 2", "BF2", "F2" // Bowser in the Fire Sea (Fight)
+- 34 (0x22): "Bowser Fight 3", "Fight 3", "BF3", "F3" // Bowser in the Sky (Fight)
+- 28 (0x1C): "Metal Cap", "MC" // Cavern of the Metal Cap
+- 29 (0x1D): "Wing Cap", "WC" // Tower of the Wing Cap
+- 18 (0x12): "Vanish Cap", "VC" // Vanish Cap Under the Moat
+- 27 (0x1B): "Secret Level 1", "Secret 1", "SL1", "S1" // The Princess's Secret Slide
+- 20 (0x14): "Secret Level 2", "Secret 2", "SL2", "S2" // Secret Aquarium
+- 31 (0x1F): "Secret Level 3", "Secret 3", "SL3", "S3" // Wing Mario over the Rainbow
+- 25 (0x19): "Secret Level 4", "Secret 4", "SL4", "S4", "Cake", "End" // End Cake Picture
 
 ## ASL File Customization
 
@@ -90,12 +90,12 @@ You can add or remove course labels as desired. Note that different areas within
 ## Code Reference
 
 Animation ID's
-- 4864 aka 0x1300: warp hole
-- 4866 aka 0x1302: land star/key dance, exit
-- 4867 aka 0x1303: water star dance
-- 4871 aka 0x1307: land star/key dance, no exit
-- 6404 aka 0x1904: falling after star grab
-- 6409 aka 0x1909: Grand Star grab
+- 4864 (0x1300): warp hole
+- 4866 (0x1302): land star/key dance, exit
+- 4867 (0x1303): water star dance
+- 4871 (0x1307): land star/key dance, no exit
+- 6404 (0x1904): falling after star grab
+- 6409 (0x1909): Grand Star grab
 
 ## Special Thanks
 
