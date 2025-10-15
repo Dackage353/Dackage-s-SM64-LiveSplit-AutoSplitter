@@ -462,7 +462,12 @@ update
         current.key1Flag = (current.keyFlagsByte & (1 << 4)) != 0 || (current.keyFlagsByte & (1 << 6)) != 0;
         current.key2Flag = (current.keyFlagsByte & (1 << 5)) != 0 || (current.keyFlagsByte & (1 << 7)) != 0;
         
-        bool areaFinishedLoading = vars.newAreaIndex == 0xFF && current.levelID == old.levelID && current.areaIndex != old.areaIndex;
+        if (current.levelID != old.levelID)
+        {
+            vars.newAreaIndex = -1;
+        }
+        
+        bool areaFinishedLoading = vars.newAreaIndex == -1 && current.animationID != 4864;
         if (areaFinishedLoading)
         {
             vars.newAreaIndex = current.areaIndex;
@@ -471,14 +476,10 @@ update
         vars.isLastSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
         vars.levelChanged = current.levelID != old.levelID;
         vars.notFromFileSelect = old.levelID != 1;
-        vars.isNewArea = current.levelID != old.levelID || (current.areaIndex != vars.newAreaIndex && current.areaIndex != 0xFF);
-        vars.isSpecificAreaAndChanged = vars.splitAreaIndex != -1 && current.areaIndex != old.areaIndex;
+        vars.isDifferentAreaAndNotLoading = current.areaIndex != vars.newAreaIndex && current.animationID != 4864;
+        vars.isSpecificAreaAndFinishedLoading = vars.splitAreaIndex != -1 && areaFinishedLoading;
         
-        if (vars.isNewArea)
-        {
-            vars.newAreaIndex = current.areaIndex;
-        }
-        
+        if (vars.isDifferentAreaAndNotLoading) vars.newAreaIndex = current.areaIndex;
         if (vars.levelChanged && vars.notFromFileSelect) vars.splitLevelIDHasChanged = true;
         if (current.starCount != old.starCount) vars.splitStarCountHasChanged = true;
         if (current.key1Flag != old.key1Flag || current.key2Flag != old.key2Flag) vars.splitKeyHasChanged = true;
@@ -572,11 +573,11 @@ split
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
         {
-            return vars.levelChanged || vars.isSpecificAreaAndChanged;
+            return vars.levelChanged || vars.isSpecificAreaAndFinishedLoading;
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_AreaKeywords, vars.splitOption))
         {
-            return vars.isNewArea || vars.isSpecificAreaAndChanged;
+            return vars.levelChanged || vars.isDifferentAreaAndNotLoading || vars.isSpecificAreaAndFinishedLoading;
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
         {
@@ -605,7 +606,7 @@ onStart
 {
     vars.deleteFileA = settings["DeleteFileA"];
     vars.numVBlanksResetOffset = 0;
-    vars.newAreaIndex = 0xFF;
+    vars.newAreaIndex = -1;
     
     current.splitName = null;
     current.splitIndex = 0;
