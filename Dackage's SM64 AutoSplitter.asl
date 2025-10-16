@@ -57,8 +57,8 @@ startup
     #region Initialize settings
     settings.Add("DeleteFileA", false, "Delete \"File A\" when a new run starts");
     
-    settings.Add("SplitOnLastSplitStar", false, "Split on final split when Grand Star or regular star was grabbed");
-    settings.Add("SplitOnLastSplitWarp", false, "Split on final split when warped in B3 fight (for Star Road 0/80 Star)");
+    settings.Add("SplitOnFinalSplitStar", false, "Split on final split when Grand Star or regular star was grabbed");
+    settings.Add("SplitOnFinalSplitWarp", false, "Split on final split when warped in B3 fight (for Star Road 0/80 Star)");
     settings.Add("LastImpactStartReset", false, "Enable Last Impact start/reset mode");
     
     settings.Add("SwapStarCountAndLevelSymbols", false, "Swap the star count () and level [] symbols");
@@ -474,15 +474,15 @@ update
             vars.newAreaIndex = -1;
         }
         
-        bool stillLoading = current.areaIndex == 0xFF || current.actionID == vars.ActionID_Disappeared || current.actionID == vars.ActionID_StarDanceExit ||
-            current.actionID == vars.ActionID_StarDanceWater;
+        bool stillLoading = current.areaIndex == 0xFF || current.actionID == vars.ActionID_Disappeared ||
+            current.actionID == vars.ActionID_StarDanceExit || current.actionID == vars.ActionID_StarDanceWater;
         bool newAreaFinishedLoading = vars.newAreaIndex == -1 && !stillLoading;
         if (newAreaFinishedLoading)
         {
             vars.newAreaIndex = current.areaIndex;
         }
         
-        vars.isLastSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
+        vars.isFinalSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
         vars.levelChanged = current.levelID != old.levelID && old.levelID != 1;
         vars.sameLevelAreaChange = current.levelID == old.levelID && current.areaIndex != vars.newAreaIndex && current.levelID != 1 && !stillLoading;
         vars.newSpecificAreaLoad = vars.splitAreaIndex != -1 && newAreaFinishedLoading;
@@ -546,30 +546,26 @@ reset
 
 split
 {
-    if (vars.isLastSplit && (settings["SplitOnLastSplitStar"] || settings["SplitOnLastSplitWarp"]))
+    if (vars.isFinalSplit && current.passedAllTests)
     {
-        if (current.passedAllTests)
+        if (settings["SplitOnFinalSplitStar"])
         {
-            if (settings["SplitOnLastSplitStar"])
-            {
-                bool starGrabbed = current.actionID == vars.ActionID_StarDanceExit || current.actionID == vars.ActionID_StarDanceWater || current.actionID == vars.ActionID_StarDanceNoExit ||
-                    current.actionID == vars.ActionID_FallAfterStarGrab || current.actionID == vars.ActionID_GrandStarCutscene;
-                
-                if (starGrabbed) return true;
-            }
-                
-            if (settings["SplitOnLastSplitWarp"] && current.actionID == vars.ActionID_Disappeared && current.levelID == 34)
-            {
-                return true;
-            }
+            bool starGrabbed = current.actionID == vars.ActionID_StarDanceExit || current.actionID == vars.ActionID_StarDanceWater ||
+                current.actionID == vars.ActionID_StarDanceNoExit || current.actionID == vars.ActionID_FallAfterStarGrab ||
+                current.actionID == vars.ActionID_GrandStarCutscene;
+            
+            if (starGrabbed) return true;
         }
-    }
-    else if (vars.splitContainsReset)
-    {
-        if (old.passedAllTests && current.numVBlanks < old.numVBlanks)
+            
+        if (settings["SplitOnFinalSplitWarp"] && current.actionID == vars.ActionID_Disappeared && current.levelID == 34)
         {
             return true;
         }
+    }
+    
+    if (vars.splitContainsReset)
+    {
+        return old.passedAllTests && current.numVBlanks < old.numVBlanks;
     }
     else if (current.passedAllTests && (vars.splitHasBasicConditions || settings["UseDefaultSplitOptionWhenNoConditions"]))
     {
