@@ -1,0 +1,39 @@
+gMarioStates
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/types.h#L255
+- struct MarioState
+- 0x8033B170
+
+gMarioStates -> numStars
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/types.h#L302
+- s16 (signed short)
+- 0x8033B170 + 0xAA = 0x8033B21A
+
+gCurrLevelNum
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/area.c#L53
+- s16 (signed short)
+- 0x8032DDF8
+
+gPlayerSpawnInfos
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/area.h#L33
+- struct SpawnInfo
+- 0x8033b4b0
+
+gPlayerSpawnInfos -> areaIndex
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/area.h#L36C2-L36C3
+- u8 (unsigned byte)
+- 0x8033b4b0 + 0xC
+
+gMarioStates -> action
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/types.h#L260C18-L260C24
+- u32 (unsigned int)
+- 0x8033B170 + 0x0C = 0x8033B17C
+
+gNumVblanks
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/main.c#L52
+- u32 (unsigned int)
+- 0x8032D580
+
+gSaveBuffer
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/src/game/save_file.h#L66
+- struct SaveBuffer
+- 0x80207700

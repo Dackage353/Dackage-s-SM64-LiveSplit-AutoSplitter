@@ -1,0 +1,27 @@
+var sb = new StringBuilder();
+
+sb.Append("[ASL] ");
+sb.Append("starCount: " + current.starCount);
+sb.Append(" - numVBlanks: " + current.numVBlanks);
+sb.Append(" - keyFlagsByte: " + current.keyFlagsByte);
+
+sb.Append(" - levelID: " + current.levelID);
+sb.Append(" - areaIndex: " + current.areaIndex);
+sb.Append(" - newAreaIndex: " + vars.newAreaIndex);
+sb.Append(" - actionID: " + current.actionID.ToString("X"));
+
+sb.Append(" - newAreaFinishedLoading: " + newAreaFinishedLoading);
+sb.Append(" - stillLoading: " + stillLoading);
+
+sb.Append(" - sameLevelAreaChange: " + vars.sameLevelAreaChange);
+sb.Append(" - newSpecificAreaLoad: " + vars.newSpecificAreaLoad);
+sb.Append(" - levelChanged: " + vars.levelChanged);
+
+print(sb.ToString());
+
+
+
+
+
+
+

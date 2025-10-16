@@ -1,0 +1,7 @@
+https://learn.microsoft.com/en-us/sysinternals/downloads/debugview
+
+Dbgview.exe
+not the other 2
+
+Capture -> Capture Win32 (on)
+Edit -> Filter/Highlight -> Include: [ASL
