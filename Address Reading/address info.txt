@@ -1,3 +1,6 @@
+All the actions id's
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/sm64.h#L140
+
 gMarioStates
 - https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/types.h#L255
 - struct MarioState

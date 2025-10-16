@@ -104,12 +104,6 @@ You can add or remove course labels as desired. Note that different areas within
 - #region Add course labels
 
 ----------
-## Code Reference
-
-Action ID's
-- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/sm64.h#L140
-
-----------
 ## Special Thanks
 
 - DJ_Tala for help with testing
