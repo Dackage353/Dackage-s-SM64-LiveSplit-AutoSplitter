@@ -106,13 +106,8 @@ You can add or remove course labels as desired. Note that different areas within
 ----------
 ## Code Reference
 
-Animation ID's
-- 4864 (0x1300): warp hole
-- 4866 (0x1302): land star/key dance, exit
-- 4867 (0x1303): water star dance
-- 4871 (0x1307): land star/key dance, no exit
-- 6404 (0x1904): falling after star grab
-- 6409 (0x1909): Grand Star grab
+Action ID's
+- https://github.com/n64decomp/sm64/blob/9921382a68bb0c865e5e45eb594d9c64db59b1af/include/sm64.h#L140
 
 ----------
 ## Special Thanks
