@@ -26,12 +26,13 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 ![Options](readme_images/options.png)
 
 ----------
-## Common Issues
-
-Tips
+## Tips
 - The main autosplitter version won't work on decomp hacks. These need a custom autosplitter version for each hack.
 - You can edit split names during the run and it will probably work.
 - Conditions must be separated by a space. Like "star (1)" and not "star(1)"
+
+----------
+## Common Issues
 
 "Keys aren't working"
 - Keys only work on File A at the moment. I want to fix this eventually
