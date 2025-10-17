@@ -28,10 +28,10 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 ----------
 ## Common Issues
 
-"It won't split"
+Tips
+- The main autosplitter version won't work on decomp hacks. These need a custom autosplitter version for each hack.
 - You can edit split names during the run and it will probably work.
-- Check that conditions are separated by a space. Like "star (1)" and not "star(1)"
-- Note that the main autosplitter version won't work on decomp hacks. These need a custom autosplitter version for each hack.
+- Conditions must be separated by a space. Like "star (1)" and not "star(1)"
 
 "Keys aren't working"
 - Keys only work on File A at the moment. I want to fix this eventually
