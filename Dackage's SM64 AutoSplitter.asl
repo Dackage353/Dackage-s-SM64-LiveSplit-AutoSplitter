@@ -600,7 +600,7 @@ split
             return vars.newStarGrab;
         }
     }
-
+    
     return false;
 }
 
