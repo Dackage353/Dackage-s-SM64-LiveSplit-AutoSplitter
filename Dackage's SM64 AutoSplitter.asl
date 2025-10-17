@@ -488,6 +488,7 @@ update
         vars.levelChanged = current.levelID != old.levelID && old.levelID != 1;
         vars.sameLevelAreaChange = current.levelID == old.levelID && current.areaIndex != vars.newAreaIndex && current.levelID != 1 && !stillLoading;
         vars.newSpecificAreaLoad = vars.splitAreaIndex != -1 && newAreaFinishedLoading;
+        vars.areaTrigger = vars.sameLevelAreaChange || vars.newSpecificAreaLoad;
         
         vars.newXCam = current.actionID != old.actionID && (current.actionID == vars.ActionID_StarDanceExit ||
             current.actionID == vars.ActionID_StarDanceWater || current.actionID == vars.ActionID_StarDanceNoExit);
@@ -583,11 +584,11 @@ split
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
         {
-            return vars.levelChanged || vars.newSpecificAreaLoad;
+            return vars.levelChanged || (vars.areaTrigger && vars.splitAreaIndex != -1);
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_AreaKeywords, vars.splitOption))
         {
-            return vars.levelChanged || vars.sameLevelAreaChange || vars.newSpecificAreaLoad;
+            return vars.levelChanged || (vars.areaTrigger && (vars.splitLevelID == -1 || vars.splitAreaIndex != -1));
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
         {
