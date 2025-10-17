@@ -1,7 +1,7 @@
 # Dackage's SM64 LiveSplit AutoSplitter
 
 Wanting to add the ability to use course labels, I looked into making my autosplitter version. This is
-	functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of.
+    functionally very similiar to aglab2's "LiveSplit.SuperMario64.asl" autosplitter and is what I built off of.
 - https://github.com/aglab2/LiveSplitAutoSplitters
 
 #### Main Features
@@ -18,6 +18,13 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 - Parallel Launcher
 
 ----------
+## Setup
+- Download the .asl file in [releases](https://github.com/Dackage353/Dackage-s-SM64-LiveSplit-AutoSplitter/releases)
+- Add a "Scriptable Auto Splitter" to you LiveSplit layout. + -> Control -> Scriptable Auto Splitter
+- Configure options for your run. It's recommended to turn off "reset" and "Delete File A..." until you are comfortable with the autosplitter
+![Options](Readme Images/options.png)
+
+----------
 ## Common Issues
 
 "It won't split"
@@ -28,7 +35,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 "Keys aren't working"
 - Keys only work on File A at the moment. I want to fix this eventually
 
-"How to split on toad stars" 
+"How to split on toad stars"
 - The splitter waits for an area change by default to split. It's recommended to do it this way for accurate golds.
 - If you wish, you can split on star grab or xcam by adding -g or -x to the split name e.g. "toad star (32) -g"
 
@@ -89,18 +96,18 @@ Use these to handle when it will split after the condition is true.
 
 There are additional settings you can customize by editing the .asl file
 - any basic text editor will do, but I've been using VS Code. If you do, you can change the language to C#
-	so that it's easier to read.
+    so that it's easier to read.
 - .asl uses C# code (.NET Framework 4.8.1)
 
 The split option can be changed. By default it's "area" but you can also do level, grab, xcam, or classic.
 - Look for: vars.SplitOption_Default = "area";
-	
+    
 You can add or remove specific key or reset keywords. Look for:
 - vars.ResetKeywords = new string[] { "R", "reset" };
 - vars.KeyKeywords = new string[] { "key" };
-	
+    
 You can add or remove course labels as desired. Note that different areas within a level share the
-	same level id. Look for:
+    same level id. Look for:
 - #region Add course labels
 
 ----------

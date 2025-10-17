@@ -483,9 +483,18 @@ update
         }
         
         vars.isFinalSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
+        vars.splitWithNoCondition = settings["UseDefaultSplitOptionWhenNoConditions"] && (!vars.isFinalSplit || (!settings["SplitOnFinalSplitStar"] && !settings["SplitOnFinalSplitWarp"]));
+        
         vars.levelChanged = current.levelID != old.levelID && old.levelID != 1;
         vars.sameLevelAreaChange = current.levelID == old.levelID && current.areaIndex != vars.newAreaIndex && current.levelID != 1 && !stillLoading;
         vars.newSpecificAreaLoad = vars.splitAreaIndex != -1 && newAreaFinishedLoading;
+        
+        vars.newXCam = current.actionID != old.actionID && (current.actionID == vars.ActionID_StarDanceExit ||
+            current.actionID == vars.ActionID_StarDanceWater || current.actionID == vars.ActionID_StarDanceNoExit);
+        vars.newStarGrab = current.actionID != old.actionID && (current.actionID == vars.ActionID_FallAfterStarGrab ||
+            (vars.newXCam && old.actionID != vars.ActionID_FallAfterStarGrab)) ;
+        vars.xCamJustEnded = current.actionID != old.actionID && (old.actionID == vars.ActionID_StarDanceExit ||
+            old.actionID == vars.ActionID_StarDanceWater || old.actionID == vars.ActionID_StarDanceNoExit);
         
         if (vars.sameLevelAreaChange) vars.newAreaIndex = current.areaIndex;
         if (vars.levelChanged) vars.splitLevelIDHasChanged = true;
@@ -550,11 +559,10 @@ split
     {
         if (settings["SplitOnFinalSplitStar"])
         {
-            bool starGrabbed = current.actionID == vars.ActionID_StarDanceExit || current.actionID == vars.ActionID_StarDanceWater ||
-                current.actionID == vars.ActionID_StarDanceNoExit || current.actionID == vars.ActionID_FallAfterStarGrab ||
-                current.actionID == vars.ActionID_GrandStarCutscene;
-            
-            if (starGrabbed) return true;
+            if (vars.newStarGrab || current.actionID == vars.ActionID_GrandStarCutscene)
+            {
+                return true;
+            }
         }
             
         if (settings["SplitOnFinalSplitWarp"] && current.actionID == vars.ActionID_Disappeared && current.levelID == 34)
@@ -567,14 +575,11 @@ split
     {
         return old.passedAllTests && current.numVBlanks < old.numVBlanks;
     }
-    else if (current.passedAllTests && (vars.splitHasBasicConditions || settings["UseDefaultSplitOptionWhenNoConditions"]))
+    else if (current.passedAllTests && (vars.splitHasBasicConditions || vars.splitWithNoCondition))
     {
         if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_ClassicKeywords, vars.splitOption))
         {
-            bool xCamJustEnded = current.actionID != old.actionID && (old.actionID == vars.ActionID_StarDanceExit ||
-                old.actionID == vars.ActionID_StarDanceWater || old.actionID == vars.ActionID_StarDanceNoExit);
-            
-            return vars.levelChanged || xCamJustEnded;
+            return vars.splitStarCountHasChanged && (vars.levelChanged || vars.xCamJustEnded);
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
         {
@@ -586,20 +591,11 @@ split
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
         {
-            bool newXCam = (current.actionID == vars.ActionID_StarDanceExit && old.actionID != vars.ActionID_StarDanceExit) ||
-                (current.actionID == vars.ActionID_StarDanceWater && old.actionID != vars.ActionID_StarDanceWater) ||
-                (current.actionID == vars.ActionID_StarDanceNoExit && old.actionID != vars.ActionID_StarDanceNoExit);
-            
-            return newXCam;
+            return vars.newXCam;
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_GrabKeywords, vars.splitOption))
         {
-            bool newStarGrabOrXCam = (current.actionID == vars.ActionID_StarDanceExit || current.actionID == vars.ActionID_StarDanceWater ||
-                current.actionID == vars.ActionID_StarDanceNoExit || current.actionID == vars.ActionID_FallAfterStarGrab) &&
-                (old.actionID != vars.ActionID_StarDanceExit && old.actionID != vars.ActionID_StarDanceWater &&
-                old.actionID != vars.ActionID_StarDanceNoExit && old.actionID != vars.ActionID_FallAfterStarGrab);
-            
-            return newStarGrabOrXCam;
+            return vars.newStarGrab;
         }
     }
 
