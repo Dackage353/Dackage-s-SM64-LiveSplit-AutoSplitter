@@ -487,8 +487,7 @@ update
         
         vars.levelChanged = current.levelID != old.levelID && old.levelID != 1;
         vars.sameLevelAreaChange = current.levelID == old.levelID && current.areaIndex != vars.newAreaIndex && current.levelID != 1 && !stillLoading;
-        vars.newSpecificAreaLoad = vars.splitAreaIndex != -1 && newAreaFinishedLoading;
-        vars.areaTrigger = vars.sameLevelAreaChange || vars.newSpecificAreaLoad;
+        vars.areaTrigger = vars.sameLevelAreaChange || (vars.splitAreaIndex != -1 && newAreaFinishedLoading));
         
         vars.newXCam = current.actionID != old.actionID && (current.actionID == vars.ActionID_StarDanceExit ||
             current.actionID == vars.ActionID_StarDanceWater || current.actionID == vars.ActionID_StarDanceNoExit);
