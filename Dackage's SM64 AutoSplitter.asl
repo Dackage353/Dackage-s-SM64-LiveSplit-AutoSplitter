@@ -584,11 +584,13 @@ split
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_LevelKeywords, vars.splitOption))
         {
-            return vars.levelChanged || (vars.areaTrigger && vars.splitAreaIndex != -1);
+            return vars.levelChanged || (vars.splitAreaIndex != -1 && vars.areaTrigger);
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_AreaKeywords, vars.splitOption))
         {
-            return vars.levelChanged || (vars.areaTrigger && (vars.splitLevelID == -1 || vars.splitAreaIndex != -1));
+            bool levelConditionWithoutArea = vars.splitLevelID != -1 && vars.splitAreaIndex == -1;
+            
+            return vars.levelChanged || (!levelConditionWithoutArea && vars.areaTrigger);
         }
         else if (vars.StringArrayContains_IgnoreCase(vars.SplitOption_XCamKeywords, vars.splitOption))
         {
