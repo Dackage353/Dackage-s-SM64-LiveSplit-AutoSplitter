@@ -57,7 +57,7 @@ startup
     #region Initialize settings
     settings.Add("DeleteFileA", false, "Delete \"File A\" when a new run starts");
     
-    settings.Add("SplitOnFinalSplitStar", false, "Split on final split when Grand Star or regular star was grabbed");
+    settings.Add("SplitOnFinalSplitStar", true, "Split on final split when Grand Star or regular star was grabbed");
     settings.Add("SplitOnFinalSplitWarp", false, "Split on final split when warped in B3 fight (for Star Road 0/80 Star)");
     settings.Add("LastImpactStartReset", false, "Enable Last Impact start/reset mode");
     
