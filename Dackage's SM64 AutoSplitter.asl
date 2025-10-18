@@ -492,7 +492,7 @@ update
         vars.newXCam = current.actionID != old.actionID && (current.actionID == vars.ActionID_StarDanceExit ||
             current.actionID == vars.ActionID_StarDanceWater || current.actionID == vars.ActionID_StarDanceNoExit);
         vars.newStarGrab = current.actionID != old.actionID && (current.actionID == vars.ActionID_FallAfterStarGrab ||
-            (vars.newXCam && old.actionID != vars.ActionID_FallAfterStarGrab)) ;
+            (vars.newXCam && old.actionID != vars.ActionID_FallAfterStarGrab));
         vars.xCamJustEnded = current.actionID != old.actionID && (old.actionID == vars.ActionID_StarDanceExit ||
             old.actionID == vars.ActionID_StarDanceWater || old.actionID == vars.ActionID_StarDanceNoExit);
         
