@@ -20,7 +20,7 @@ Wanting to add the ability to use course labels, I looked into making my autospl
 ----------
 ## Setup
 - Download the .asl file in [releases](https://github.com/Dackage353/Dackage-s-SM64-LiveSplit-AutoSplitter/releases)
-- Add a "Scriptable Auto Splitter" to you LiveSplit layout. + -> Control -> Scriptable Auto Splitter
+- Add a "Scriptable Auto Splitter" to you LiveSplit layout. edit layout -> ➕ -> Control -> Scriptable Auto Splitter
 - Configure options for your run. It's recommended to turn off "reset" and "Delete File A..." until you are comfortable with the autosplitter
 
 ![Options](readme_images/options.png)
