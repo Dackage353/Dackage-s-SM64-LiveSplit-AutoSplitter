@@ -4,7 +4,7 @@ state("retroarch") { }
 startup
 {
     #region Editable settings and constants
-    refreshRate = 60;
+    refreshRate = 100; // Behaves strangely. 100 is high enough to achieve the actual max of 60
     
     // Not case sensitive
     vars.SplitOption_ClassicKeywords = new string[] { "c", "classic" };
