@@ -48,26 +48,16 @@ tmpl = ""
 with open(tmpl_path) as tmpl_file:
     tmpl = tmpl_file.read()
 
-gMarioStates_numStars          = ptr_swap16(map["gMarioStates"] + 0xAA)
-gCurrLevelNum                  = ptr_swap16(map["gCurrLevelNum"])
-gPlayerSpawnInfos_areaIndex    = ptr_swap8(map["gPlayerSpawnInfos"] + 0xC)
-gMarioStates_action            = ptr_swap32(map["gMarioStates"] + 0xC)
-gNumVblanks                    = ptr_swap32(map["gNumVblanks"])
-gSaveBufferSize                = 0x78
-gSaveBuffer                    = ptr_swap32(map["gSaveBuffer"] + 0x4)
-gTimerOffset                   = ptr_swap32(map["gTimerOffset"])
-gGlobalTimer                   = ptr_swap32(map["gGlobalTimer"])
-
 asl = tmpl.format(
-    gMarioStates_numStars = gMarioStates_numStars,
-    gCurrLevelNum = gCurrLevelNum,
-    gPlayerSpawnInfos_areaIndex = gPlayerSpawnInfos_areaIndex,
-    gMarioStates_action = gMarioStates_action,
-    gNumVblanks = gNumVblanks,
-    gSaveBufferSize = gSaveBufferSize,
-    gSaveBuffer = gSaveBuffer,
-    gTimerOffset = gTimerOffset,
-    gGlobalTimer = gGlobalTimer
+    gMarioStates_numStars          = ptr_swap16(map["gMarioStates"] + 0xAA),
+    gCurrLevelNum                  = ptr_swap16(map["gCurrLevelNum"]),
+    gPlayerSpawnInfos_areaIndex    = ptr_swap8(map["gPlayerSpawnInfos"] + 0xC),
+    gMarioStates_action            = ptr_swap32(map["gMarioStates"] + 0xC),
+    gNumVblanks                    = ptr_swap32(map["gNumVblanks"]),
+    gSaveBufferSize                = 0x78,
+    gSaveBuffer                    = ptr_swap32(map["gSaveBuffer"] + 0x4),
+    gTimerOffset                   = ptr_swap32(map["gTimerOffset"]),
+    gGlobalTimer                   = ptr_swap32(map["gGlobalTimer"])
 )
 
 with open(asl_path, 'w') as asl_file:
