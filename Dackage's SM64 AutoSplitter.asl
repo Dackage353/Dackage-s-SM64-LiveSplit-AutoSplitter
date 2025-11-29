@@ -483,10 +483,12 @@ update
         }
         
         vars.isFinalSplit = timer.CurrentSplitIndex == timer.Run.Count - 1;
-        vars.splitWithNoCondition = settings["UseDefaultSplitOptionWhenNoConditions"] && (!vars.isFinalSplit || (!settings["SplitOnFinalSplitStar"] && !settings["SplitOnFinalSplitWarp"]));
+        vars.splitWithNoCondition = settings["UseDefaultSplitOptionWhenNoConditions"] && (!vars.isFinalSplit ||
+            (!settings["SplitOnFinalSplitStar"] && !settings["SplitOnFinalSplitWarp"]));
         
         vars.levelChanged = current.levelID != old.levelID && old.levelID != 1;
-        vars.sameLevelAreaChange = current.levelID == old.levelID && current.areaIndex != vars.newAreaIndex && current.levelID != 1 && !stillLoading;
+        vars.sameLevelAreaChange = current.levelID == old.levelID && current.areaIndex != vars.newAreaIndex &&
+            current.levelID != 1 && !stillLoading;
         vars.areaTrigger = vars.sameLevelAreaChange || (vars.splitAreaIndex != -1 && newAreaFinishedLoading);
         
         vars.newXCam = current.actionID != old.actionID && (current.actionID == vars.ActionID_StarDanceExit ||
@@ -503,7 +505,7 @@ update
         #endregion
         
         #region Test split info against current values
-        bool passedKeyTest = !vars.splitContainsKey || (vars.splitKeyHasChanged);
+        bool passedKeyTest = !vars.splitContainsKey || vars.splitKeyHasChanged;
         bool passedStarCountTest = (vars.splitStarCount == -1 || current.starCount == vars.splitStarCount) &&
             (!vars.splitOnAnyStarCountChange || vars.splitStarCountHasChanged);
         bool passedLevelIDTest = (vars.splitLevelID == -1 || current.levelID == vars.splitLevelID) &&
