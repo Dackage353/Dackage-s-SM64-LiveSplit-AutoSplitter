@@ -33,7 +33,7 @@ startup
     vars.ActionIDAddress = 0x1b6e84;
     vars.NumVBlanksAddress = 0x116ce4;
     vars.FileAAddress = 0x201fa4;
-    vars.FileALength = 0x70;
+    vars.FileALength = 0x3e6;
     #endregion
     
     #region Non-editable constants
