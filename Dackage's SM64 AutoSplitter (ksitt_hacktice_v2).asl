@@ -578,7 +578,8 @@ split
             }
         }
             
-        if (settings["SplitOnFinalSplitWarp"] && current.actionID == vars.ActionID_Disappeared && current.levelID == 34)
+        if (settings["SplitOnFinalSplitWarp"] && current.actionID != old.actionID &&
+            current.actionID == vars.ActionID_Disappeared && current.levelID == 34)
         {
             return true;
         }
