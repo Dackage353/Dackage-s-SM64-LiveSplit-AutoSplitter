@@ -37,9 +37,6 @@ startup
     
     vars.IGTTimerOffsetAddress = 0x{gTimerOffset:x};
     vars.IGTGlobalTimerAddress = 0x{gGlobalTimer:x};
-    
-    vars.IGTTimerOffsetAddress = 0x1aed34;
-    vars.IGTGlobalTimerAddress = 0x1b0588;
     #endregion
     
     #region Non-editable constants
@@ -581,7 +578,8 @@ split
             }}
         }}
             
-        if (settings["SplitOnFinalSplitWarp"] && current.actionID == vars.ActionID_Disappeared && current.levelID == 34)
+        if (settings["SplitOnFinalSplitWarp"] && current.actionID != old.actionID &&
+            current.actionID == vars.ActionID_Disappeared && current.levelID == 34)
         {{
             return true;
         }}
